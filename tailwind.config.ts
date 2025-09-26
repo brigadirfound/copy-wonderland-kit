@@ -47,6 +47,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Portfolio specific colors
+        "hero-gradient": "var(--hero-gradient)",
+        "nav-blur": "var(--nav-blur)",
+        "card-hover": "hsl(var(--card-hover))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -57,6 +61,27 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      spacing: {
+        "space-hero": "var(--space-hero)",
+        "space-section": "var(--space-section)",
+        "space-card": "var(--space-card)",
+      },
+      fontSize: {
+        "hero": "var(--font-size-hero)",
+        "large": "var(--font-size-large)", 
+        "medium": "var(--font-size-medium)",
+      },
+      backgroundImage: {
+        "hero-gradient": "var(--hero-gradient)",
+      },
+      backgroundColor: {
+        "nav-blur": "var(--nav-blur)",
+        "card-hover": "hsl(var(--card-hover))",
+      },
+      transitionTimingFunction: {
+        "smooth": "var(--transition-smooth)",
+        "fast": "var(--transition-fast)",
       },
       borderRadius: {
         lg: "var(--radius)",
