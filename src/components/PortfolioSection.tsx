@@ -1,22 +1,22 @@
 const PortfolioSection = () => {
   const projects = [
     {
-      title: "Проект Студии",
+      title: "Веб-приложение для студии",
       description: "Работал как системный инженер полного цикла в студии, расположенной в Москве, Россия.",
       image: "/api/placeholder/500/300",
-      link: "#experience"
+      link: "/skills"
     },
     {
       title: "Со-основатель ABLE",
       description: "Со-основал некоммерческую организацию, которая вносит вклад в развитие местного сообщества.",
       image: "/api/placeholder/500/300", 
-      link: "#experience"
+      link: "/skills"
     },
     {
       title: "Цифровые Решения",
       description: "Разработка современных веб-приложений и пользовательских интерфейсов для различных клиентов.",
       image: "/api/placeholder/500/300",
-      link: "#creative"
+      link: "/cases"
     }
   ];
 

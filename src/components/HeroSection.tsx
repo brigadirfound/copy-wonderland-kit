@@ -18,10 +18,10 @@ const HeroSection = () => {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-                Я Имя.<br />
-                <span className="text-muted-foreground">Designer.</span><br />
-                <span className="text-muted-foreground">Engineer.</span><br />
-                <span className="text-muted-foreground">Architect.</span>
+                Я Макс.<br />
+                <span className="text-muted-foreground">Дизайнер.</span><br />
+                <span className="text-muted-foreground">Инженер.</span><br />
+                <span className="text-muted-foreground">Архитектор.</span>
               </h1>
               <p className="text-xl text-muted-foreground mt-6">
                 Инклюзивное Цифровое Пространство

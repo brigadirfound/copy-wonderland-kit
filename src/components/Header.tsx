@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Github, Instagram, Mail } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const navItems = [
-    { label: "About", href: "#about" },
-    { label: "Creative", href: "#creative" },
-    { label: "Experience", href: "#experience" },
-    { label: "Contact", href: "#contact" },
+    { label: "Обо мне", href: "/" },
+    { label: "Кейсы", href: "/cases" },
+    { label: "Навыки", href: "/skills" },
+    { label: "Связаться", href: "/contact" },
   ];
 
   return (
@@ -14,20 +18,25 @@ const Header = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo/Name */}
-          <div className="text-xl font-bold text-foreground">
-            Ваше Имя
+          <div 
+            className="text-xl font-bold text-foreground cursor-pointer hover:text-primary transition-colors"
+            onClick={() => navigate("/")}
+          >
+            Макс Бригадир
           </div>
 
           {/* Navigation Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.label}
-                href={item.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                onClick={() => navigate(item.href)}
+                className={`text-muted-foreground hover:text-foreground transition-colors duration-200 ${
+                  location.pathname === item.href ? 'text-foreground font-medium' : ''
+                }`}
               >
                 {item.label}
-              </a>
+              </button>
             ))}
           </div>
 
