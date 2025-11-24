@@ -75,15 +75,15 @@ const PortfolioSection = () => {
                   {/* Project Content */}
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="space-y-4 flex-1">
-                      <div>
-                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-4">
-                          {project.title}
-                        </h3>
-                        <div className="w-16 h-1 bg-border mb-4"></div>
-                      </div>
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
                       <p className="text-muted-foreground text-sm leading-relaxed">
                         {project.description}
                       </p>
+                    </div>
+                    <div className="pt-4 border-t border-border mt-4">
+                      <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
                     </div>
                   </div>
                 </div>
