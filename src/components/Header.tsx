@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Github, Instagram, Mail } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Github, Instagram, Mail, Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { label: "Обо мне", href: "/" },
@@ -12,6 +15,11 @@ const Header = () => {
     { label: "Навыки", href: "/skills" },
     { label: "Связаться", href: "/contact" },
   ];
+
+  const handleNavigation = (href: string) => {
+    navigate(href);
+    setIsOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-nav-blur backdrop-blur-md border-b border-border">
@@ -25,7 +33,7 @@ const Header = () => {
             Макс Бригадир
           </div>
 
-          {/* Navigation Menu */}
+          {/* Navigation Menu - Desktop */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
@@ -40,17 +48,58 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Social Icons */}
+          {/* Right side - Social Icons + Mobile Menu */}
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Instagram className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Mail className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Github className="h-5 w-5" />
-            </Button>
+            {/* Social Icons - Hidden on mobile */}
+            <div className="hidden md:flex items-center space-x-3">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Instagram className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Mail className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Github className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* Mobile Menu */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] bg-background">
+                <div className="flex flex-col space-y-6 mt-8">
+                  {/* Navigation Items */}
+                  {navItems.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavigation(item.href)}
+                      className={`text-left text-lg text-muted-foreground hover:text-foreground transition-colors duration-200 ${
+                        location.pathname === item.href ? 'text-foreground font-medium' : ''
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                  
+                  {/* Social Icons in Mobile Menu */}
+                  <div className="flex items-center space-x-3 pt-6 border-t border-border">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                      <Instagram className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                      <Mail className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                      <Github className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
