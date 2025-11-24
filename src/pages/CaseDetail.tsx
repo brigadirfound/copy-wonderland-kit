@@ -127,6 +127,17 @@ export default function CaseDetail() {
 
           {/* Media Content */}
           <div className="space-y-8">
+            {/* Image */}
+            {caseItem.image && (
+              <div className="rounded-lg overflow-hidden">
+                <img 
+                  src={caseItem.image} 
+                  alt={caseItem.title}
+                  className="w-full h-auto"
+                />
+              </div>
+            )}
+
             {/* Video */}
             {caseItem.video && (
               <div className="rounded-lg overflow-hidden bg-muted max-w-3xl mx-auto">
@@ -138,17 +149,6 @@ export default function CaseDetail() {
                   <source src={caseItem.video} type="video/mp4" />
                   Ваш браузер не поддерживает видео.
                 </video>
-              </div>
-            )}
-
-            {/* Image */}
-            {caseItem.image && (
-              <div className="rounded-lg overflow-hidden">
-                <img 
-                  src={caseItem.image} 
-                  alt={caseItem.title}
-                  className="w-full h-auto"
-                />
               </div>
             )}
 
