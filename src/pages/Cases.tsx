@@ -28,10 +28,7 @@ const Cases = () => {
   }, []);
 
   const loadCases = async () => {
-    const { data, error } = await supabase
-      .from('cases')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabase.from("cases").select("*").order("created_at", { ascending: false });
 
     if (!error && data) {
       setCases(data);
@@ -46,12 +43,10 @@ const Cases = () => {
         <div className="container mx-auto px-6">
           {/* Header Section */}
           <div className="py-16 text-center">
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
-              Мои Кейсы
-            </h1>
+            <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">Мои Кейсы</h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-center">
-              Портфолио проектов, над которыми я работал. От концепции до реализации — 
-              каждый проект отражает мой подход к созданию качественных цифровых решений.
+              Портфолио проектов, над которыми я работал. От концепции до реализации — каждый проект отражает мой подход
+              к созданию качественных цифровых решений.
             </p>
           </div>
 
@@ -60,11 +55,7 @@ const Cases = () => {
             <h2 className="text-2xl font-bold text-foreground mb-8">Все проекты</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {cases.map((caseItem) => (
-                <a
-                  key={caseItem.id}
-                  href={`/cases/${caseItem.id}`}
-                  className="group cursor-pointer h-full"
-                >
+                <a key={caseItem.id} href={`/cases/${caseItem.id}`} className="group cursor-pointer h-full">
                   <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105 flex flex-col h-full">
                     <div className="aspect-video bg-muted relative overflow-hidden">
                       {caseItem.image ? (
@@ -80,9 +71,7 @@ const Cases = () => {
                         <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                           {caseItem.title}
                         </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                          {caseItem.description}
-                        </p>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{caseItem.description}</p>
                       </div>
                       <div className="pt-4 border-t border-border mt-4">
                         <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
@@ -104,7 +93,7 @@ const Cases = () => {
               </p>
             </div>
           )}
-          
+
           {loading && (
             <div className="text-center py-16">
               <p className="text-muted-foreground">Загрузка кейсов...</p>
