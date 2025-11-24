@@ -38,11 +38,11 @@ const Contact = () => {
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-6">
           {/* Header Section */}
-          <div className="py-16 text-center">
+          <div className="py-16">
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Свяжитесь со мной
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-muted-foreground max-w-3xl mb-8">
               Готов обсудить ваш проект и возможности сотрудничества
             </p>
             <Button

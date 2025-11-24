@@ -88,12 +88,12 @@ const PortfolioSection = () => {
         )}
 
         {/* Contact Section */}
-        <div className="mt-20 text-center">
+        <div className="mt-20">
           <div className="bg-card rounded-2xl p-12 border border-border">
             <h2 className="text-3xl font-bold text-foreground mb-8">
               По вопросам сотрудничества
             </h2>
-            <div className="flex justify-center">
+            <div>
               <a
                 href="https://t.me/brigadirfound"
                 target="_blank"

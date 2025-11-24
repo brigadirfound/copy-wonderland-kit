@@ -45,11 +45,11 @@ const Cases = () => {
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-6">
           {/* Header Section */}
-          <div className="py-16 text-center">
+          <div className="py-16">
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Мои Кейсы
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               Портфолио проектов, над которыми я работал. От концепции до реализации — 
               каждый проект отражает мой подход к созданию качественных цифровых решений.
             </p>
