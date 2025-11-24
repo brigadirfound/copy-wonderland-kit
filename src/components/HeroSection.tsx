@@ -2,12 +2,11 @@ import heroPortrait from "@/assets/hero-portrait.jpg";
 
 const HeroSection = () => {
   const skills = [
-    { emoji: "📚", title: "Content Curator", description: "Создание и курирование контента" },
-    { emoji: "🔎", title: "System Engineer", description: "Системное администрирование" },
-    { emoji: "🚀", title: "UI / UX Designer", description: "Дизайн пользовательских интерфейсов" },
-    { emoji: "💡", title: "Solution Architect", description: "Архитектурные решения" },
-    { emoji: "🛠", title: "Network Engineer", description: "Сетевые технологии" },
-    { emoji: "📷", title: "Photographer", description: "Фотография и визуальный контент" },
+    { emoji: "🎬", title: "Video Producer", description: "Монтаж видео для соцсетей и бизнеса" },
+    { emoji: "💻", title: "Web Developer", description: "Создание лендингов и сайтов на Tilda и не только" },
+    { emoji: "✨", title: "Creative Specialist", description: "Создание креативов и визуального контента" },
+    { emoji: "📋", title: "Content Manager", description: "Управление контентом и визуальной стратегией" },
+    { emoji: "🎨", title: "Digital Creator", description: "Создание и публикация разнообразного цифрового контента" },
   ];
 
   return (
@@ -18,13 +17,13 @@ const HeroSection = () => {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-                Я Макс.<br />
-                <span className="text-muted-foreground">Дизайнер.</span><br />
-                <span className="text-muted-foreground">Инженер.</span><br />
-                <span className="text-muted-foreground">Архитектор.</span>
+                Я Максим.<br />
+                <span className="text-muted-foreground">Видеомонтажер.</span><br />
+                <span className="text-muted-foreground">Веб-разработчик.</span><br />
+                <span className="text-muted-foreground">Креативный специалист.</span>
               </h1>
               <p className="text-xl text-muted-foreground mt-6">
-                Инклюзивное Цифровое Пространство
+                Создаю фото, видео, сайты и креативы — от идеи до реализации
               </p>
             </div>
 
