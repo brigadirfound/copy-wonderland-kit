@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Plus, 
   Trash2, 
@@ -14,123 +18,192 @@ import {
   Star, 
   Calendar,
   Eye,
-  ArrowLeft
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
+  ArrowLeft,
+  LogOut
+} from 'lucide-react';
 
 interface CaseItem {
   id: string;
   title: string;
   description: string;
-  image?: string;
+  image: string;
   tags: string[];
   date: string;
-  link?: string;
+  link: string;
   featured: boolean;
 }
 
-const AdminPanel = () => {
+export default function AdminPanel() {
+  const { isAdmin, isLoading, user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
   const [cases, setCases] = useState<CaseItem[]>([]);
-  const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [editForm, setEditForm] = useState<CaseItem>({
-    id: "",
-    title: "",
-    description: "",
-    image: "",
+  const [formData, setFormData] = useState<Omit<CaseItem, 'id'>>({
+    title: '',
+    description: '',
+    image: '',
     tags: [],
-    date: new Date().toISOString().slice(0, 7), // YYYY-MM format
-    link: "",
-    featured: false
+    date: new Date().toISOString().split('T')[0],
+    link: '',
+    featured: false,
   });
 
   useEffect(() => {
-    loadCases();
-  }, []);
-
-  const loadCases = () => {
-    const savedCases = localStorage.getItem("portfolio-cases");
-    if (savedCases) {
-      setCases(JSON.parse(savedCases));
+    if (!isLoading && !user) {
+      navigate('/auth');
+    } else if (!isLoading && user && !isAdmin) {
+      toast({
+        title: 'Доступ запрещен',
+        description: 'У вас нет прав администратора',
+        variant: 'destructive',
+      });
+      navigate('/');
     }
-  };
+  }, [isAdmin, isLoading, user, navigate, toast]);
 
-  const saveCases = (newCases: CaseItem[]) => {
-    localStorage.setItem("portfolio-cases", JSON.stringify(newCases));
-    setCases(newCases);
+  useEffect(() => {
+    if (isAdmin) {
+      loadCases();
+    }
+  }, [isAdmin]);
+
+  const loadCases = async () => {
+    const { data, error } = await supabase
+      .from('cases')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast({
+        title: 'Ошибка загрузки',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } else if (data) {
+      setCases(data);
+    }
   };
 
   const handleCreate = () => {
     setIsCreating(true);
-    setEditForm({
-      id: Date.now().toString(),
-      title: "",
-      description: "",
-      image: "",
+    setFormData({
+      title: '',
+      description: '',
+      image: '',
       tags: [],
-      date: new Date().toISOString().slice(0, 7),
-      link: "",
-      featured: false
+      date: new Date().toISOString().split('T')[0],
+      link: '',
+      featured: false,
     });
   };
 
   const handleEdit = (caseItem: CaseItem) => {
-    setIsEditing(caseItem.id);
-    setEditForm({ ...caseItem });
+    setEditingId(caseItem.id);
+    setIsCreating(false);
+    setFormData({
+      title: caseItem.title,
+      description: caseItem.description,
+      image: caseItem.image,
+      tags: caseItem.tags,
+      date: caseItem.date,
+      link: caseItem.link,
+      featured: caseItem.featured,
+    });
   };
 
-  const handleSave = () => {
-    if (!editForm.title.trim() || !editForm.description.trim()) {
+  const handleSave = async () => {
+    if (!formData.title || !formData.description) {
       toast({
-        title: "Ошибка",
-        description: "Заполните обязательные поля (название и описание)",
-        variant: "destructive"
+        title: 'Ошибка',
+        description: 'Заполните обязательные поля',
+        variant: 'destructive',
       });
       return;
     }
 
-    let newCases;
-    if (isCreating) {
-      newCases = [...cases, editForm];
+    try {
+      if (isCreating) {
+        const { error } = await supabase
+          .from('cases')
+          .insert([formData]);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Успешно',
+          description: 'Кейс добавлен',
+        });
+      } else {
+        const { error } = await supabase
+          .from('cases')
+          .update(formData)
+          .eq('id', editingId);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Успешно',
+          description: 'Кейс обновлен',
+        });
+      }
+
+      setEditingId(null);
+      setIsCreating(false);
+      loadCases();
+    } catch (error: any) {
       toast({
-        title: "Кейс создан",
-        description: "Новый кейс успешно добавлен в портфолио"
-      });
-    } else {
-      newCases = cases.map(c => c.id === editForm.id ? editForm : c);
-      toast({
-        title: "Кейс обновлен", 
-        description: "Изменения сохранены успешно"
+        title: 'Ошибка',
+        description: error.message,
+        variant: 'destructive',
       });
     }
+  };
 
-    saveCases(newCases);
-    setIsEditing(null);
-    setIsCreating(false);
+  const handleDelete = async (id: string) => {
+    if (!confirm('Вы уверены?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('cases')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Успешно',
+        description: 'Кейс удален',
+      });
+      loadCases();
+    } catch (error: any) {
+      toast({
+        title: 'Ошибка',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleCancel = () => {
-    setIsEditing(null);
+    setEditingId(null);
     setIsCreating(false);
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm("Вы уверены, что хотите удалить этот кейс?")) {
-      const newCases = cases.filter(c => c.id !== id);
-      saveCases(newCases);
-      toast({
-        title: "Кейс удален",
-        description: "Кейс был удален из портфолио"
-      });
-    }
+  const handleTagsChange = (value: string) => {
+    const tagsArray = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    setFormData({ ...formData, tags: tagsArray });
   };
 
-  const handleTagsChange = (tagsString: string) => {
-    const tags = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-    setEditForm(prev => ({ ...prev, tags }));
-  };
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
+  }
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -149,14 +222,24 @@ const AdminPanel = () => {
               </Button>
               <h1 className="text-2xl font-bold text-foreground">Админ Панель</h1>
             </div>
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/cases")}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Просмотр кейсов
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                onClick={() => navigate("/cases")}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Просмотр кейсов
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={signOut}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Выход
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -170,14 +253,14 @@ const AdminPanel = () => {
               Добавляйте, редактируйте и удаляйте кейсы в своем портфолио
             </p>
           </div>
-          <Button onClick={handleCreate} disabled={isCreating || !!isEditing}>
+          <Button onClick={handleCreate} disabled={isCreating || !!editingId}>
             <Plus className="h-4 w-4 mr-2" />
             Добавить кейс
           </Button>
         </div>
 
         {/* Create/Edit Form */}
-        {(isCreating || isEditing) && (
+        {(isCreating || editingId) && (
           <Card className="p-6 mb-8 border border-accent">
             <h3 className="text-xl font-semibold text-foreground mb-4">
               {isCreating ? "Создание нового кейса" : "Редактирование кейса"}
@@ -186,45 +269,41 @@ const AdminPanel = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Название кейса *
-                  </label>
+                  <Label htmlFor="title">Название кейса *</Label>
                   <Input
-                    value={editForm.title}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="Название проекта"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Ссылка на изображение
-                  </label>
+                  <Label htmlFor="image">Ссылка на изображение</Label>
                   <Input
-                    value={editForm.image || ""}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, image: e.target.value }))}
+                    id="image"
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                     placeholder="https://example.com/image.jpg"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Дата (ГГГГ-ММ)
-                  </label>
+                  <Label htmlFor="date">Дата</Label>
                   <Input
-                    type="month"
-                    value={editForm.date}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, date: e.target.value }))}
+                    id="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Ссылка на проект
-                  </label>
+                  <Label htmlFor="link">Ссылка на проект</Label>
                   <Input
-                    value={editForm.link || ""}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, link: e.target.value }))}
+                    id="link"
+                    value={formData.link}
+                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
                     placeholder="https://example.com"
                   />
                 </div>
@@ -232,23 +311,21 @@ const AdminPanel = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Описание *
-                  </label>
+                  <Label htmlFor="description">Описание *</Label>
                   <Textarea
-                    value={editForm.description}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Описание проекта, технологии, результаты..."
                     rows={6}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Теги (через запятую)
-                  </label>
+                  <Label htmlFor="tags">Теги (через запятую)</Label>
                   <Input
-                    value={editForm.tags.join(", ")}
+                    id="tags"
+                    value={formData.tags.join(', ')}
                     onChange={(e) => handleTagsChange(e.target.value)}
                     placeholder="React, TypeScript, Design"
                   />
@@ -258,13 +335,11 @@ const AdminPanel = () => {
                   <input
                     type="checkbox"
                     id="featured"
-                    checked={editForm.featured}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, featured: e.target.checked }))}
+                    checked={formData.featured}
+                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                     className="rounded border-border"
                   />
-                  <label htmlFor="featured" className="text-sm font-medium text-foreground">
-                    Показать в избранных
-                  </label>
+                  <Label htmlFor="featured">Показать в избранных</Label>
                 </div>
               </div>
             </div>
@@ -331,7 +406,7 @@ const AdminPanel = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => handleEdit(caseItem)}
-                      disabled={!!isEditing || isCreating}
+                      disabled={!!editingId || isCreating}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -339,7 +414,7 @@ const AdminPanel = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => handleDelete(caseItem.id)}
-                      disabled={!!isEditing || isCreating}
+                      disabled={!!editingId || isCreating}
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -350,17 +425,7 @@ const AdminPanel = () => {
             ))
           )}
         </div>
-
-        <div className="mt-12 p-6 bg-muted/20 rounded-lg">
-          <h3 className="font-semibold text-foreground mb-2">💡 Совет</h3>
-          <p className="text-sm text-muted-foreground">
-            Для полноценной работы с базой данных и файлами рекомендуется подключить Supabase. 
-            Это позволит сохранять данные между сессиями и загружать изображения напрямую в систему.
-          </p>
-        </div>
       </main>
     </div>
   );
-};
-
-export default AdminPanel;
+}

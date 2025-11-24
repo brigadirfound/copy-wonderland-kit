@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Github, Instagram, Mail } from "lucide-react";
+import { Github, Instagram, Mail, LogIn } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
     { label: "Обо мне", href: "/" },
@@ -40,7 +42,7 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Social Icons */}
+          {/* Social Icons & Auth */}
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Instagram className="h-5 w-5" />
@@ -51,6 +53,17 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Github className="h-5 w-5" />
             </Button>
+            {!user && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/auth')}
+                className="ml-2"
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Войти
+              </Button>
+            )}
           </div>
         </div>
       </nav>
