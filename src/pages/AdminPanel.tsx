@@ -221,11 +221,11 @@ export default function AdminPanel() {
       return;
     }
 
-    // Validate file size (max 100MB)
-    if (file.size > 100 * 1024 * 1024) {
+    // Validate file size (max 150MB)
+    if (file.size > 150 * 1024 * 1024) {
       toast({
         title: 'Ошибка',
-        description: 'Размер файла не должен превышать 100MB',
+        description: 'Размер файла не должен превышать 150MB',
         variant: 'destructive',
       });
       return;
@@ -400,7 +400,7 @@ export default function AdminPanel() {
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground">
-                        Максимальный размер: 100MB. Поддерживаемые форматы: MP4, WebM, MOV
+                        Максимальный размер: 150MB. Поддерживаемые форматы: MP4, WebM, MOV
                       </p>
                     </div>
                   ) : (
