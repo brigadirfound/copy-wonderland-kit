@@ -89,25 +89,17 @@ const PortfolioSection = () => {
         {/* Contact Section */}
         <div className="mt-20 text-center">
           <div className="bg-card rounded-2xl p-12 border border-border">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Давайте Работать Вместе
+            <h2 className="text-3xl font-bold text-foreground mb-8">
+              По вопросам сотрудничества
             </h2>
-            <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Готов обсудить новые проекты и возможности сотрудничества. 
-              Свяжитесь со мной для создания чего-то удивительного.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex justify-center">
               <a
-                href="mailto:your-email@example.com"
+                href="https://t.me/brigadirfound"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                Написать Email
-              </a>
-              <a
-                href="tel:+7-xxx-xxx-xxxx"
-                className="bg-secondary text-secondary-foreground px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors"
-              >
-                Позвонить
+                Написать в Телеграм
               </a>
             </div>
           </div>
