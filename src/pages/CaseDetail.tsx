@@ -16,6 +16,7 @@ interface CaseItem {
   date: string;
   link?: string;
   featured: boolean;
+  additional_images?: string[];
 }
 
 export default function CaseDetail() {
@@ -148,6 +149,24 @@ export default function CaseDetail() {
                   alt={caseItem.title}
                   className="w-full h-auto"
                 />
+              </div>
+            )}
+
+            {/* Additional Images Gallery */}
+            {caseItem.additional_images && caseItem.additional_images.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold text-foreground">Галерея проекта</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {caseItem.additional_images.map((imageUrl, index) => (
+                    <div key={index} className="rounded-lg overflow-hidden border border-border">
+                      <img 
+                        src={imageUrl} 
+                        alt={`${caseItem.title} - изображение ${index + 1}`}
+                        className="w-full h-auto hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 

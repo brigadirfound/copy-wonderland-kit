@@ -30,6 +30,7 @@ interface CaseItem {
   tags: string[];
   date: string;
   link: string;
+  additional_images: string[];
 }
 
 export default function AdminPanel() {
@@ -48,6 +49,7 @@ export default function AdminPanel() {
     tags: [],
     date: new Date().toISOString().split('T')[0],
     link: '',
+    additional_images: [],
   });
 
   useEffect(() => {
@@ -96,6 +98,7 @@ export default function AdminPanel() {
       tags: [],
       date: new Date().toISOString().split('T')[0],
       link: '',
+      additional_images: [],
     });
   };
 
@@ -110,6 +113,7 @@ export default function AdminPanel() {
       tags: caseItem.tags,
       date: caseItem.date,
       link: caseItem.link,
+      additional_images: caseItem.additional_images || [],
     });
   };
 
@@ -194,6 +198,11 @@ export default function AdminPanel() {
   const handleTagsChange = (value: string) => {
     const tagsArray = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     setFormData({ ...formData, tags: tagsArray });
+  };
+
+  const handleAdditionalImagesChange = (value: string) => {
+    const imagesArray = value.split('\n').map(url => url.trim()).filter(url => url !== '');
+    setFormData({ ...formData, additional_images: imagesArray });
   };
 
   if (isLoading) {
@@ -341,6 +350,20 @@ export default function AdminPanel() {
                     onChange={(e) => handleTagsChange(e.target.value)}
                     placeholder="React, TypeScript, Design"
                   />
+                </div>
+
+                <div>
+                  <Label htmlFor="additional_images">Дополнительные изображения (каждая ссылка с новой строки)</Label>
+                  <Textarea
+                    id="additional_images"
+                    value={formData.additional_images.join('\n')}
+                    onChange={(e) => handleAdditionalImagesChange(e.target.value)}
+                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
+                    rows={4}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Каждая ссылка на изображение с новой строки для галереи проекта
+                  </p>
                 </div>
               </div>
             </div>

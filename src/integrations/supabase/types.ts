@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       cases: {
         Row: {
+          additional_images: string[] | null
           created_at: string | null
           date: string
           description: string
@@ -29,6 +30,7 @@ export type Database = {
           video: string | null
         }
         Insert: {
+          additional_images?: string[] | null
           created_at?: string | null
           date: string
           description: string
@@ -42,6 +44,7 @@ export type Database = {
           video?: string | null
         }
         Update: {
+          additional_images?: string[] | null
           created_at?: string | null
           date?: string
           description?: string
