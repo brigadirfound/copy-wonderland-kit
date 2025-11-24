@@ -49,7 +49,7 @@ const HeroSection = () => {
 
             <div className="mt-8">
               <h3 className="text-lg font-medium text-muted-foreground">
-                И другие интересные вещи...
+                Всегда в поиске креативных решений
               </h3>
             </div>
           </div>
