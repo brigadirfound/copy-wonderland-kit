@@ -3,8 +3,9 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Calendar, Tag } from "lucide-react";
+import { Calendar, Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface CaseItem {
   id: string;
@@ -20,6 +21,7 @@ interface CaseItem {
 const Cases = () => {
   const [cases, setCases] = useState<CaseItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadCases();
@@ -58,7 +60,11 @@ const Cases = () => {
             <h2 className="text-2xl font-bold text-foreground mb-8">Избранные проекты</h2>
             <div className="grid lg:grid-cols-2 gap-8">
               {cases.filter(c => c.featured).map((caseItem) => (
-                <Card key={caseItem.id} className="group overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-[1.02]">
+                <Card 
+                  key={caseItem.id} 
+                  className="group overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-[1.02] cursor-pointer"
+                  onClick={() => navigate(`/cases/${caseItem.id}`)}
+                >
                   <div className="aspect-video bg-gradient-to-br from-muted to-accent/20 relative overflow-hidden">
                     {caseItem.image ? (
                       <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
@@ -73,13 +79,8 @@ const Cases = () => {
                       <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                         {caseItem.title}
                       </h3>
-                      {caseItem.link && (
-                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      )}
                     </div>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed line-clamp-3">
                       {caseItem.description}
                     </p>
                     <div className="flex items-center justify-between">
@@ -107,7 +108,11 @@ const Cases = () => {
             <h2 className="text-2xl font-bold text-foreground mb-8">Все проекты</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {cases.map((caseItem) => (
-                <Card key={caseItem.id} className="group overflow-hidden border border-border hover:border-accent transition-all duration-300">
+                <Card 
+                  key={caseItem.id} 
+                  className="group overflow-hidden border border-border hover:border-accent transition-all duration-300 cursor-pointer"
+                  onClick={() => navigate(`/cases/${caseItem.id}`)}
+                >
                   <div className="aspect-video bg-gradient-to-br from-muted to-accent/20 relative overflow-hidden">
                     {caseItem.image ? (
                       <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
@@ -118,16 +123,9 @@ const Cases = () => {
                     )}
                   </div>
                   <div className="p-4 space-y-3">
-                    <div className="flex items-start justify-between">
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {caseItem.title}
-                      </h3>
-                      {caseItem.link && (
-                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary h-6 w-6">
-                          <ExternalLink className="h-3 w-3" />
-                        </Button>
-                      )}
-                    </div>
+                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {caseItem.title}
+                    </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
                       {caseItem.description}
                     </p>

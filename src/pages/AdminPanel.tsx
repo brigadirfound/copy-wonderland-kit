@@ -27,6 +27,7 @@ interface CaseItem {
   title: string;
   description: string;
   image: string;
+  video: string;
   tags: string[];
   date: string;
   link: string;
@@ -45,6 +46,7 @@ export default function AdminPanel() {
     title: '',
     description: '',
     image: '',
+    video: '',
     tags: [],
     date: new Date().toISOString().split('T')[0],
     link: '',
@@ -93,6 +95,7 @@ export default function AdminPanel() {
       title: '',
       description: '',
       image: '',
+      video: '',
       tags: [],
       date: new Date().toISOString().split('T')[0],
       link: '',
@@ -107,6 +110,7 @@ export default function AdminPanel() {
       title: caseItem.title,
       description: caseItem.description,
       image: caseItem.image,
+      video: caseItem.video,
       tags: caseItem.tags,
       date: caseItem.date,
       link: caseItem.link,
@@ -286,6 +290,19 @@ export default function AdminPanel() {
                     onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                     placeholder="https://example.com/image.jpg"
                   />
+                </div>
+
+                <div>
+                  <Label htmlFor="video">Ссылка на видео (MP4)</Label>
+                  <Input
+                    id="video"
+                    value={formData.video}
+                    onChange={(e) => setFormData({ ...formData, video: e.target.value })}
+                    placeholder="https://example.com/video.mp4"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Поддерживаются прямые ссылки на MP4 файлы
+                  </p>
                 </div>
 
                 <div>

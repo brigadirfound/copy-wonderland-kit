@@ -52,7 +52,7 @@ const PortfolioSection = () => {
             {projects.map((project) => (
               <a
                 key={project.id}
-                href={project.link || '/cases'}
+                href={`/cases/${project.id}`}
                 className="group cursor-pointer"
               >
                 <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105">
