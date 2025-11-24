@@ -35,15 +35,15 @@ const Skills = () => {
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-6">
           {/* Header Section */}
-          <div className="py-16 text-center">
+          <div className="py-16">
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Мои Навыки
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4">
+            <p className="text-xl text-muted-foreground max-w-3xl mb-4">
               Мультидисциплинарный подход к созданию digital-контента. 
               От видеомонтажа и веб-разработки до креативов и управления проектами.
             </p>
-            <p className="text-xl font-semibold text-foreground max-w-3xl mx-auto">
+            <p className="text-xl font-semibold text-foreground max-w-3xl">
               Работаю на результат: каждый проект — это инвестиция в твой бизнес.
             </p>
           </div>
@@ -69,7 +69,7 @@ const Skills = () => {
 
           {/* Approach Section */}
           <div className="mt-20 bg-card rounded-2xl p-12 border border-border max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-6">
               Мой подход
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
