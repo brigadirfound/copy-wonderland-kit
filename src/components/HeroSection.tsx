@@ -1,4 +1,4 @@
-import heroPortrait from "@/assets/hero-portrait.jpg";
+import heroPortrait from "@/assets/hero-portrait-new.jpg";
 
 const HeroSection = () => {
   const skills = [
