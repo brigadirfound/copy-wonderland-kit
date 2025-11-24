@@ -39,9 +39,12 @@ const Skills = () => {
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Мои Навыки
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4">
               Мультидисциплинарный подход к созданию digital-контента. 
               От видеомонтажа и веб-разработки до креативов и управления проектами.
+            </p>
+            <p className="text-xl font-semibold text-foreground max-w-3xl mx-auto">
+              Работаю на результат: каждый проект — это инвестиция в твой бизнес.
             </p>
           </div>
 
