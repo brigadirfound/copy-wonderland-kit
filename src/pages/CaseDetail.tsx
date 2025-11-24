@@ -172,7 +172,7 @@ export default function CaseDetail() {
 
             {/* Description */}
             <div className="prose prose-lg max-w-none">
-              <div className="bg-card p-6 rounded-lg border border-border">
+              <div className="bg-card p-6 pt-4 rounded-lg border border-border">
                 <h2 className="text-2xl font-bold text-foreground mb-4">О проекте</h2>
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {caseItem.description}
