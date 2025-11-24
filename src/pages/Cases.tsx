@@ -86,14 +86,7 @@ const Cases = () => {
                       </div>
                       <div className="pt-4 border-t border-border mt-4">
                         <div className="flex items-center justify-between flex-wrap gap-2">
-                          <div className="flex flex-wrap gap-2">
-                            {caseItem.tags.map((tag, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
-                                <Tag className="w-3 h-3 mr-1" />
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
+                          <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar className="w-4 h-4 mr-2" />
                             {caseItem.date}
@@ -137,13 +130,7 @@ const Cases = () => {
                         </p>
                       </div>
                       <div className="pt-4 border-t border-border mt-4">
-                        <div className="flex flex-wrap gap-2">
-                          {caseItem.tags.slice(0, 3).map((tag, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
+                        <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
                       </div>
                     </div>
                   </div>
