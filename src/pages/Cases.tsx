@@ -60,47 +60,49 @@ const Cases = () => {
             <h2 className="text-2xl font-bold text-foreground mb-8">Избранные проекты</h2>
             <div className="grid lg:grid-cols-2 gap-8">
               {cases.filter(c => c.featured).map((caseItem) => (
-                <Card 
-                  key={caseItem.id} 
-                  className="group overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-[1.02] cursor-pointer"
-                  onClick={() => navigate(`/cases/${caseItem.id}`)}
+                <a
+                  key={caseItem.id}
+                  href={`/cases/${caseItem.id}`}
+                  className="group cursor-pointer h-full"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-muted to-accent/20 relative overflow-hidden">
-                    {caseItem.image ? (
-                      <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-6xl text-muted-foreground">💼</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6 flex flex-col">
-                    <div className="space-y-4 flex-1">
-                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                        {caseItem.title}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {caseItem.description}
-                      </p>
-                    </div>
-                    <div className="pt-4 border-t border-border mt-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap gap-2">
-                          {caseItem.tags.map((tag, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              <Tag className="w-3 h-3 mr-1" />
-                              {tag}
-                            </Badge>
-                          ))}
+                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105 flex flex-col h-full">
+                    <div className="aspect-video bg-muted relative overflow-hidden">
+                      {caseItem.image ? (
+                        <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
+                          <span className="text-6xl text-muted-foreground">💼</span>
                         </div>
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          {caseItem.date}
+                      )}
+                    </div>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="space-y-4 flex-1">
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                          {caseItem.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                          {caseItem.description}
+                        </p>
+                      </div>
+                      <div className="pt-4 border-t border-border mt-4">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2">
+                            {caseItem.tags.map((tag, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                <Tag className="w-3 h-3 mr-1" />
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Calendar className="w-4 h-4 mr-2" />
+                            {caseItem.date}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </Card>
+                </a>
               ))}
             </div>
           </div>
@@ -108,42 +110,44 @@ const Cases = () => {
           {/* All Cases */}
           <div>
             <h2 className="text-2xl font-bold text-foreground mb-8">Все проекты</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {cases.map((caseItem) => (
-                <Card 
-                  key={caseItem.id} 
-                  className="group overflow-hidden border border-border hover:border-accent transition-all duration-300 cursor-pointer flex flex-col"
-                  onClick={() => navigate(`/cases/${caseItem.id}`)}
+                <a
+                  key={caseItem.id}
+                  href={`/cases/${caseItem.id}`}
+                  className="group cursor-pointer h-full"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-muted to-accent/20 relative overflow-hidden">
-                    {caseItem.image ? (
-                      <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-4xl text-muted-foreground">🚀</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4 flex flex-col">
-                    <div className="space-y-3 flex-1">
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {caseItem.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {caseItem.description}
-                      </p>
+                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105 flex flex-col h-full">
+                    <div className="aspect-video bg-muted relative overflow-hidden">
+                      {caseItem.image ? (
+                        <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
+                          <span className="text-4xl text-muted-foreground">🚀</span>
+                        </div>
+                      )}
                     </div>
-                    <div className="pt-3 border-t border-border mt-3">
-                      <div className="flex flex-wrap gap-1">
-                        {caseItem.tags.slice(0, 3).map((tag, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="space-y-3 flex-1">
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                          {caseItem.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">
+                          {caseItem.description}
+                        </p>
+                      </div>
+                      <div className="pt-4 border-t border-border mt-4">
+                        <div className="flex flex-wrap gap-2">
+                          {caseItem.tags.slice(0, 3).map((tag, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </Card>
+                </a>
               ))}
             </div>
           </div>
