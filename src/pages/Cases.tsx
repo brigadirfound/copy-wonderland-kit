@@ -49,7 +49,7 @@ const Cases = () => {
             <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Мои Кейсы
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-center">
               Портфолио проектов, над которыми я работал. От концепции до реализации — 
               каждый проект отражает мой подход к созданию качественных цифровых решений.
             </p>
