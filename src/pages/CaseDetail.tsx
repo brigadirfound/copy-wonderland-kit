@@ -129,10 +129,10 @@ export default function CaseDetail() {
           <div className="space-y-8">
             {/* Video */}
             {caseItem.video && (
-              <div className="rounded-lg overflow-hidden bg-muted">
+              <div className="rounded-lg overflow-hidden bg-muted max-w-3xl mx-auto">
                 <video 
                   controls 
-                  className="w-full"
+                  className="w-full max-h-[600px]"
                   preload="metadata"
                 >
                   <source src={caseItem.video} type="video/mp4" />
