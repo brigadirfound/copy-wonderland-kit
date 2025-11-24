@@ -1,67 +1,31 @@
 import Header from "@/components/Header";
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 
 const Skills = () => {
-  const skillCategories = [
+  const skillCards = [
     {
-      title: "Дизайн и UX/UI",
-      skills: [
-        { name: "UI/UX Design", level: 95, description: "Создание интуитивных пользовательских интерфейсов" },
-        { name: "Figma", level: 90, description: "Профессиональная работа с дизайн-системами" },
-        { name: "Adobe Creative Suite", level: 85, description: "Photoshop, Illustrator, After Effects" },
-        { name: "Prototyping", level: 88, description: "Интерактивные прототипы и анимации" }
-      ]
+      emoji: "🎬",
+      title: "Видеомонтаж",
+      description: "Профессиональный монтаж видео для соцсетей и бизнеса. Работаю в Adobe Premiere Pro и CapCut. От сырых кадров до финального экспорта.",
+      learning: "Motion-дизайн (After Effects) и AI-инструменты для видео"
     },
     {
-      title: "Разработка",
-      skills: [
-        { name: "React/TypeScript", level: 92, description: "Современная фронтенд разработка" },
-        { name: "Node.js", level: 88, description: "Серверная разработка и API" },
-        { name: "Python", level: 85, description: "Автоматизация и машинное обучение" },
-        { name: "Database Design", level: 80, description: "PostgreSQL, MongoDB, Redis" }
-      ]
+      emoji: "🌐",
+      title: "Веб-разработка",
+      description: "Создание лендингов и сайтов на Tilda с нуля до запуска. Интеграции, аналитика, адаптивный дизайн.",
+      learning: "Webflow и углублённый UX/UI"
     },
     {
-      title: "Архитектура и DevOps",
-      skills: [
-        { name: "System Architecture", level: 90, description: "Проектирование масштабируемых систем" },
-        { name: "Cloud Platforms", level: 85, description: "AWS, Azure, Google Cloud" },
-        { name: "Docker/Kubernetes", level: 82, description: "Контейнеризация и оркестрация" },
-        { name: "CI/CD", level: 88, description: "Автоматизация развертывания" }
-      ]
+      emoji: "🎨",
+      title: "Креативный дизайн",
+      description: "Баннеры, креативы для соцсетей, визуальный контент. Работаю в Photoshop и Figma.",
+      learning: "AI-генерация визуалов и брендинг"
     },
     {
+      emoji: "🛠",
       title: "Управление проектами",
-      skills: [
-        { name: "Agile/Scrum", level: 93, description: "Гибкие методологии разработки" },
-        { name: "Team Leadership", level: 87, description: "Управление командами разработки" },
-        { name: "Product Management", level: 85, description: "От идеи до реализации" },
-        { name: "Stakeholder Communication", level: 90, description: "Эффективное взаимодействие с клиентами" }
-      ]
-    }
-  ];
-
-  const achievements = [
-    {
-      title: "5+ лет опыта",
-      description: "В области дизайна и разработки",
-      icon: "🎯"
-    },
-    {
-      title: "50+ проектов",
-      description: "Успешно реализованных решений",
-      icon: "🚀"
-    },
-    {
-      title: "15+ технологий",
-      description: "В профессиональном арсенале",
-      icon: "⚡"
-    },
-    {
-      title: "100% клиентов",
-      description: "Остались довольны результатом",
-      icon: "✨"
+      description: "Организация работы от идеи до результата. Чёткая коммуникация, работа с дедлайнами, понимание бизнес-задач.",
+      learning: "Продвинутые методологии и автоматизация процессов"
     }
   ];
 
@@ -76,54 +40,61 @@ const Skills = () => {
               Мои Навыки
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Мультидисциплинарный подход к созданию цифровых продуктов. 
-              От концепции и дизайна до технической реализации и запуска.
+              Мультидисциплинарный подход к созданию digital-контента. 
+              От видеомонтажа и веб-разработки до креативов и управления проектами.
             </p>
           </div>
 
-          {/* Achievements */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {achievements.map((achievement, index) => (
-              <Card key={index} className="p-6 text-center border border-border hover:border-accent transition-colors">
-                <div className="text-4xl mb-4">{achievement.icon}</div>
-                <h3 className="text-2xl font-bold text-foreground mb-2">{achievement.title}</h3>
-                <p className="text-muted-foreground">{achievement.description}</p>
+          {/* Skills Cards */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
+            {skillCards.map((skill, index) => (
+              <Card key={index} className="p-8 border border-border hover:border-accent transition-all duration-300 hover:shadow-lg">
+                <div className="space-y-4">
+                  <div className="text-5xl mb-4">{skill.emoji}</div>
+                  <h3 className="text-2xl font-bold text-foreground">{skill.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {skill.description}
+                  </p>
+                  <div className="pt-4 border-t border-border">
+                    <p className="text-sm font-medium text-primary mb-1">Сейчас изучаю:</p>
+                    <p className="text-sm text-muted-foreground">{skill.learning}</p>
+                  </div>
+                </div>
               </Card>
             ))}
           </div>
 
-          {/* Skills Categories */}
-          <div className="space-y-12">
-            {skillCategories.map((category, categoryIndex) => (
-              <div key={categoryIndex}>
-                <h2 className="text-3xl font-bold text-foreground mb-8">{category.title}</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {category.skills.map((skill, skillIndex) => (
-                    <Card key={skillIndex} className="p-6 border border-border hover:border-accent transition-colors">
-                      <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-lg font-semibold text-foreground">{skill.name}</h3>
-                        <span className="text-sm font-medium text-primary">{skill.level}%</span>
-                      </div>
-                      <Progress value={skill.level} className="mb-3" />
-                      <p className="text-sm text-muted-foreground">{skill.description}</p>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            ))}
+          {/* Approach Section */}
+          <div className="mt-20 bg-card rounded-2xl p-12 border border-border max-w-5xl mx-auto">
+            <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
+              Мой подход
+            </h2>
+            <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
+              <p>
+                Не просто "делаю видео" или "создаю сайты" — понимаю <span className="text-foreground font-medium">зачем</span> это нужно.
+              </p>
+              <p>
+                Видео должно удерживать внимание. Сайт — конвертировать посетителей в клиентов. 
+                Креативы — выделяться в ленте.
+              </p>
+              <p className="text-primary font-semibold text-xl pt-4">
+                Результат важнее процесса. Моя цель — чтобы твой контент работал на твой бизнес.
+              </p>
+            </div>
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-20 bg-card rounded-2xl p-12 border border-border">
-            <h2 className="text-3xl font-bold text-foreground mb-6 text-center">
-              Постоянное развитие
-            </h2>
-            <p className="text-muted-foreground text-lg text-center max-w-4xl mx-auto leading-relaxed">
-              Технологии развиваются быстро, и я всегда изучаю новые инструменты и методологии. 
-              Регулярно участвую в конференциях, читаю профессиональную литературу и экспериментирую 
-              с emerging technologies. Верю в важность баланса между глубоким пониманием основ и 
-              готовностью адаптироваться к новым вызовам.
-            </p>
+          {/* Learning Philosophy */}
+          <div className="mt-12 max-w-5xl mx-auto">
+            <Card className="p-8 border border-border bg-primary/5">
+              <h3 className="text-xl font-bold text-foreground mb-4">📚 Мой подход к обучению</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Постоянно изучаю новые инструменты и технологии, чтобы оставаться актуальным в digital-индустрии. 
+                Прохожу онлайн-курсы, экспериментирую с AI-инструментами, слежу за трендами в видеомонтаже, веб-дизайне и соцсетях.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mt-4">
+                Верю в баланс: глубокое понимание основ + готовность адаптироваться к новым технологиям и методам работы.
+              </p>
+            </Card>
           </div>
         </div>
       </main>
