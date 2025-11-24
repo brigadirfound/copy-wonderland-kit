@@ -41,6 +41,8 @@ export default function AdminPanel() {
   const [cases, setCases] = useState<CaseItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [useVideoFile, setUseVideoFile] = useState(false);
   const [formData, setFormData] = useState<Omit<CaseItem, 'id'>>({
     title: '',
     description: '',
@@ -205,6 +207,67 @@ export default function AdminPanel() {
     setFormData({ ...formData, additional_images: imagesArray });
   };
 
+  const handleVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('video/')) {
+      toast({
+        title: 'Ошибка',
+        description: 'Пожалуйста, выберите видео файл',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate file size (max 100MB)
+    if (file.size > 100 * 1024 * 1024) {
+      toast({
+        title: 'Ошибка',
+        description: 'Размер файла не должен превышать 100MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      setUploadingVideo(true);
+      
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = fileName;
+
+      // Upload to Supabase Storage
+      const { error: uploadError, data } = await supabase.storage
+        .from('case-videos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('case-videos')
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, video: publicUrl });
+      
+      toast({
+        title: 'Успешно',
+        description: 'Видео загружено',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Ошибка загрузки',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
+
   if (isLoading) {
     return <div className="min-h-screen flex items-center justify-center">Загрузка...</div>;
   }
@@ -297,16 +360,62 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <Label htmlFor="video">Ссылка на видео (MP4)</Label>
-                  <Input
-                    id="video"
-                    value={formData.video}
-                    onChange={(e) => setFormData({ ...formData, video: e.target.value })}
-                    placeholder="https://example.com/video.mp4"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Поддерживаются прямые ссылки на MP4 файлы
-                  </p>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="video">Видео</Label>
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="video-type" className="text-xs text-muted-foreground">
+                        {useVideoFile ? 'Загрузить файл' : 'Вставить ссылку'}
+                      </Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setUseVideoFile(!useVideoFile);
+                          setFormData({ ...formData, video: '' });
+                        }}
+                      >
+                        {useVideoFile ? 'Использовать ссылку' : 'Загрузить файл'}
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {useVideoFile ? (
+                    <div className="space-y-2">
+                      <Input
+                        id="video"
+                        type="file"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                        disabled={uploadingVideo}
+                      />
+                      {uploadingVideo && (
+                        <p className="text-xs text-muted-foreground">
+                          Загрузка видео...
+                        </p>
+                      )}
+                      {formData.video && !uploadingVideo && (
+                        <p className="text-xs text-green-600">
+                          ✓ Видео загружено
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">
+                        Максимальный размер: 100MB. Поддерживаемые форматы: MP4, WebM, MOV
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Input
+                        id="video"
+                        value={formData.video}
+                        onChange={(e) => setFormData({ ...formData, video: e.target.value })}
+                        placeholder="https://example.com/video.mp4"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Поддерживаются прямые ссылки на MP4 файлы
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div>
