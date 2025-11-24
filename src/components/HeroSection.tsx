@@ -16,7 +16,7 @@ const HeroSection = () => {
           {/* Text Content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h1 className="text-6xl lg:text-7xl font-bold text-foreground leading-tight">
+              <h1 className="text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                 Я Максим.<br />
                 <span className="text-muted-foreground">Видеомонтажер.</span><br />
                 <span className="text-muted-foreground">Веб-разработчик.</span><br />
