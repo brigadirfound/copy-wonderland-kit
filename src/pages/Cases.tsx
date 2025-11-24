@@ -55,51 +55,6 @@ const Cases = () => {
             </p>
           </div>
 
-          {/* Featured Cases */}
-          <div className="mb-16">
-            <h2 className="text-2xl font-bold text-foreground mb-8">Избранные проекты</h2>
-            <div className="grid lg:grid-cols-2 gap-8">
-              {cases.filter(c => c.featured).map((caseItem) => (
-                <a
-                  key={caseItem.id}
-                  href={`/cases/${caseItem.id}`}
-                  className="group cursor-pointer h-full"
-                >
-                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105 flex flex-col h-full">
-                    <div className="aspect-video bg-muted relative overflow-hidden">
-                      {caseItem.image ? (
-                        <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
-                          <span className="text-6xl text-muted-foreground">💼</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="space-y-4 flex-1">
-                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                          {caseItem.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                          {caseItem.description}
-                        </p>
-                      </div>
-                      <div className="pt-4 border-t border-border mt-4">
-                        <div className="flex items-center justify-between flex-wrap gap-2">
-                          <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Calendar className="w-4 h-4 mr-2" />
-                            {caseItem.date}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
           {/* All Cases */}
           <div>
             <h2 className="text-2xl font-bold text-foreground mb-8">Все проекты</h2>

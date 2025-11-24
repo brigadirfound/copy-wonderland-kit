@@ -15,7 +15,6 @@ import {
   Edit, 
   Save, 
   X, 
-  Star, 
   Calendar,
   Eye,
   ArrowLeft,
@@ -31,7 +30,6 @@ interface CaseItem {
   tags: string[];
   date: string;
   link: string;
-  featured: boolean;
 }
 
 export default function AdminPanel() {
@@ -50,7 +48,6 @@ export default function AdminPanel() {
     tags: [],
     date: new Date().toISOString().split('T')[0],
     link: '',
-    featured: false,
   });
 
   useEffect(() => {
@@ -99,7 +96,6 @@ export default function AdminPanel() {
       tags: [],
       date: new Date().toISOString().split('T')[0],
       link: '',
-      featured: false,
     });
   };
 
@@ -114,7 +110,6 @@ export default function AdminPanel() {
       tags: caseItem.tags,
       date: caseItem.date,
       link: caseItem.link,
-      featured: caseItem.featured,
     });
   };
 
@@ -347,17 +342,6 @@ export default function AdminPanel() {
                     placeholder="React, TypeScript, Design"
                   />
                 </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="featured"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                    className="rounded border-border"
-                  />
-                  <Label htmlFor="featured">Показать в избранных</Label>
-                </div>
               </div>
             </div>
 
@@ -391,12 +375,6 @@ export default function AdminPanel() {
                   <div className="flex-1 mr-4">
                     <div className="flex items-center space-x-3 mb-2">
                       <h3 className="text-lg font-semibold text-foreground">{caseItem.title}</h3>
-                      {caseItem.featured && (
-                        <Badge variant="default" className="text-xs">
-                          <Star className="w-3 h-3 mr-1" />
-                          Избранное
-                        </Badge>
-                      )}
                       <Badge variant="outline" className="text-xs">
                         <Calendar className="w-3 h-3 mr-1" />
                         {caseItem.date}
