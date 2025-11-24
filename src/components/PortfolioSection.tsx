@@ -1,24 +1,37 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface CaseItem {
+  id: string;
+  title: string;
+  description: string;
+  image?: string;
+  tags?: string[];
+  date?: string;
+  link?: string;
+  featured: boolean;
+}
+
 const PortfolioSection = () => {
-  const projects = [
-    {
-      title: "Веб-приложение для студии",
-      description: "Работал как системный инженер полного цикла в студии, расположенной в Москве, Россия.",
-      image: "/api/placeholder/500/300",
-      link: "/skills"
-    },
-    {
-      title: "Со-основатель ABLE",
-      description: "Со-основал некоммерческую организацию, которая вносит вклад в развитие местного сообщества.",
-      image: "/api/placeholder/500/300", 
-      link: "/skills"
-    },
-    {
-      title: "Цифровые Решения",
-      description: "Разработка современных веб-приложений и пользовательских интерфейсов для различных клиентов.",
-      image: "/api/placeholder/500/300",
-      link: "/cases"
+  const [projects, setProjects] = useState<CaseItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadCases();
+  }, []);
+
+  const loadCases = async () => {
+    const { data, error } = await supabase
+      .from('cases')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(3);
+
+    if (!error && data) {
+      setProjects(data);
     }
-  ];
+    setLoading(false);
+  };
 
   return (
     <section id="experience" className="py-space-section bg-background">
@@ -27,33 +40,51 @@ const PortfolioSection = () => {
           Мои Последние Работы
         </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="group cursor-pointer"
-            >
-              <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105">
-                {/* Project Image */}
-                <div className="aspect-video bg-muted relative overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
-                    <span className="text-4xl text-muted-foreground">🚀</span>
+        {loading ? (
+          <div className="text-center text-muted-foreground">Загрузка...</div>
+        ) : projects.length === 0 ? (
+          <div className="text-center text-muted-foreground">
+            <p>Кейсы пока не добавлены.</p>
+            <p className="text-sm mt-2">Добавьте их через <a href="/panel" className="text-primary hover:underline">админ панель</a></p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+              <a
+                key={project.id}
+                href={project.link || '/cases'}
+                className="group cursor-pointer"
+              >
+                <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105">
+                  {/* Project Image */}
+                  <div className="aspect-video bg-muted relative overflow-hidden">
+                    {project.image ? (
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
+                        <span className="text-4xl text-muted-foreground">🚀</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Project Content */}
+                  <div className="p-6 space-y-3">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
+                      {project.description}
+                    </p>
                   </div>
                 </div>
-
-                {/* Project Content */}
-                <div className="p-6 space-y-3">
-                  <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </a>
+            ))}
+          </div>
+        )}
 
         {/* Contact Section */}
         <div className="mt-20 text-center">
