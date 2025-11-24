@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Send } from 'lucide-react';
 
 interface CaseItem {
   id: string;
@@ -97,8 +98,9 @@ const PortfolioSection = () => {
                 href="https://t.me/brigadirfound"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
               >
+                <Send className="w-5 h-5" />
                 Написать в Телеграм
               </a>
             </div>
