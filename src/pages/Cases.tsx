@@ -76,9 +76,12 @@ const Cases = () => {
                   </div>
                   <div className="p-6 flex flex-col h-full">
                     <div className="space-y-4 flex-1">
-                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                        {caseItem.title}
-                      </h3>
+                      <div>
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-4">
+                          {caseItem.title}
+                        </h3>
+                        <div className="w-16 h-1 bg-border mb-4"></div>
+                      </div>
                       <p className="text-muted-foreground leading-relaxed">
                         {caseItem.description}
                       </p>
@@ -126,9 +129,12 @@ const Cases = () => {
                   </div>
                   <div className="p-4 flex flex-col h-full">
                     <div className="space-y-3 flex-1">
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {caseItem.title}
-                      </h3>
+                      <div>
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors mb-3">
+                          {caseItem.title}
+                        </h3>
+                        <div className="w-12 h-0.5 bg-border mb-3"></div>
+                      </div>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {caseItem.description}
                       </p>
