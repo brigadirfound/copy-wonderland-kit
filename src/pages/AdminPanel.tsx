@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   LogOut
 } from 'lucide-react';
+import { z } from 'zod';
 
 interface CaseItem {
   id: string;
@@ -32,6 +33,33 @@ interface CaseItem {
   link: string;
   additional_images: string[];
 }
+
+// Validation schema for case items
+const caseSchema = z.object({
+  title: z.string()
+    .trim()
+    .min(1, { message: "Название обязательно" })
+    .max(200, { message: "Название должно быть не более 200 символов" }),
+  description: z.string()
+    .trim()
+    .min(1, { message: "Описание обязательно" })
+    .max(2000, { message: "Описание должно быть не более 2000 символов" }),
+  image: z.string()
+    .trim()
+    .url({ message: "Изображение должно быть валидным URL" })
+    .or(z.literal('')),
+  video: z.string()
+    .trim()
+    .url({ message: "Видео должно быть валидным URL" })
+    .or(z.literal('')),
+  link: z.string()
+    .trim()
+    .url({ message: "Ссылка должна быть валидным URL" })
+    .or(z.literal('')),
+  tags: z.array(z.string()),
+  date: z.string().min(1, { message: "Дата обязательна" }),
+  additional_images: z.array(z.string().url({ message: "Изображения должны быть валидными URL" })),
+});
 
 export default function AdminPanel() {
   const { isAdmin, isLoading, user, signOut } = useAuth();
@@ -120,13 +148,19 @@ export default function AdminPanel() {
   };
 
   const handleSave = async () => {
-    if (!formData.title || !formData.description) {
-      toast({
-        title: 'Ошибка',
-        description: 'Заполните обязательные поля',
-        variant: 'destructive',
-      });
-      return;
+    // Validate form data
+    try {
+      caseSchema.parse(formData);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: 'Ошибка валидации',
+          description: firstError.message,
+          variant: 'destructive',
+        });
+        return;
+      }
     }
 
     try {
