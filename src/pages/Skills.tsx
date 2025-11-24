@@ -48,17 +48,17 @@ const Skills = () => {
           {/* Skills Cards */}
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
             {skillCards.map((skill, index) => (
-              <Card key={index} className="p-8 border border-border hover:border-accent transition-all duration-300 hover:shadow-lg">
-                <div className="space-y-4">
+              <Card key={index} className="p-8 border border-border hover:border-accent transition-all duration-300 hover:shadow-lg flex flex-col">
+                <div className="space-y-4 flex-1">
                   <div className="text-5xl mb-4">{skill.emoji}</div>
                   <h3 className="text-2xl font-bold text-foreground">{skill.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     {skill.description}
                   </p>
-                  <div className="pt-4 border-t border-border">
-                    <p className="text-sm font-medium text-primary mb-1">Сейчас изучаю:</p>
-                    <p className="text-sm text-muted-foreground">{skill.learning}</p>
-                  </div>
+                </div>
+                <div className="pt-4 border-t border-border mt-4">
+                  <p className="text-sm font-medium text-primary mb-1">Сейчас изучаю:</p>
+                  <p className="text-sm text-muted-foreground">{skill.learning}</p>
                 </div>
               </Card>
             ))}
