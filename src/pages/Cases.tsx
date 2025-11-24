@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Calendar, Tag } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CaseItem {
   id: string;
@@ -18,44 +19,23 @@ interface CaseItem {
 
 const Cases = () => {
   const [cases, setCases] = useState<CaseItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Загружаем кейсы из localStorage
-    const savedCases = localStorage.getItem("portfolio-cases");
-    if (savedCases) {
-      setCases(JSON.parse(savedCases));
-    } else {
-      // Демо кейсы
-      const demoCases: CaseItem[] = [
-        {
-          id: "1",
-          title: "Веб-приложение для студии",
-          description: "Полный цикл разработки современного веб-приложения с использованием React, TypeScript и современных инструментов дизайна.",
-          tags: ["React", "TypeScript", "UI/UX"],
-          date: "2024-01",
-          featured: true
-        },
-        {
-          id: "2", 
-          title: "Мобильное приложение ABLE",
-          description: "Разработка мобильного приложения для некоммерческой организации с фокусом на доступность и инклюзивность.",
-          tags: ["Mobile", "Design", "Accessibility"],
-          date: "2023-12",
-          featured: false
-        },
-        {
-          id: "3",
-          title: "Система управления контентом",
-          description: "Создание гибкой CMS для управления контентом с современным интерфейсом и расширенной функциональностью.",
-          tags: ["CMS", "Backend", "API"],
-          date: "2023-11",
-          featured: true
-        }
-      ];
-      setCases(demoCases);
-      localStorage.setItem("portfolio-cases", JSON.stringify(demoCases));
-    }
+    loadCases();
   }, []);
+
+  const loadCases = async () => {
+    const { data, error } = await supabase
+      .from('cases')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setCases(data);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -165,13 +145,19 @@ const Cases = () => {
           </div>
 
           {/* Empty State */}
-          {cases.length === 0 && (
+          {!loading && cases.length === 0 && (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">📂</div>
               <h3 className="text-xl font-semibold text-foreground mb-2">Пока нет кейсов</h3>
               <p className="text-muted-foreground">
                 Кейсы будут отображаться здесь после добавления через админ панель
               </p>
+            </div>
+          )}
+          
+          {loading && (
+            <div className="text-center py-16">
+              <p className="text-muted-foreground">Загрузка кейсов...</p>
             </div>
           )}
         </div>
