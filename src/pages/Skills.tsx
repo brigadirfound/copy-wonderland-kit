@@ -6,7 +6,7 @@ const Skills = () => {
     {
       emoji: "🎬",
       title: "Видеомонтаж",
-      description: "Профессиональный монтаж видео для соцсетей и бизнеса. Работаю в Adobe Premiere Pro и CapCut. От сырых кадров до финального экспорта.",
+      description: "Монтаж видео для соцсетей и бизнеса. Работаю в Adobe Premiere Pro и CapCut. От сырых кадров до финального экспорта.",
       learning: "Motion-дизайн (After Effects) и AI-инструменты для видео"
     },
     {
