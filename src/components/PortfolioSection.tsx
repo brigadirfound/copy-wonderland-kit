@@ -96,7 +96,7 @@ const PortfolioSection = () => {
         <div className="mt-20 text-center">
           <div className="bg-card rounded-2xl p-12 border border-border">
             <h2 className="text-3xl font-bold text-foreground mb-8">
-              По вопросам сотрудничества
+              Готовы Обсудить Ваш Проект?
             </h2>
             <div className="flex justify-center">
               <a
