@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Github, Instagram, Mail, Menu } from "lucide-react";
+import { Send, Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -50,16 +50,15 @@ const Header = () => {
 
           {/* Right side - Social Icons + Mobile Menu */}
           <div className="flex items-center space-x-3">
-            {/* Social Icons - Hidden on mobile */}
+            {/* Telegram Icon - Hidden on mobile */}
             <div className="hidden md:flex items-center space-x-3">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                <Instagram className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                <Mail className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                <Github className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-muted-foreground hover:text-foreground"
+                onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
+              >
+                <Send className="h-5 w-5" />
               </Button>
             </div>
 
@@ -85,16 +84,15 @@ const Header = () => {
                     </button>
                   ))}
                   
-                  {/* Social Icons in Mobile Menu */}
+                  {/* Telegram in Mobile Menu */}
                   <div className="flex items-center space-x-3 pt-6 border-t border-border">
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                      <Instagram className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                      <Mail className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                      <Github className="h-5 w-5" />
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-muted-foreground hover:text-foreground"
+                      onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
+                    >
+                      <Send className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
