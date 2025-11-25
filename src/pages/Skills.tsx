@@ -74,7 +74,7 @@ const Skills = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                Не просто "делаю видео" или "создаю сайты" — понимаю <span className="text-foreground font-medium">зачем</span> это нужно.
+                Не просто «делаю видео» или «создаю сайты» — понимаю <span className="text-foreground font-medium">зачем</span> это нужно.
               </p>
               <p>
                 Видео должно удерживать внимание. Сайт — конвертировать посетителей в клиентов. 
