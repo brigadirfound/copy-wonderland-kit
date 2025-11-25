@@ -23,7 +23,7 @@ const HeroSection = () => {
                 <span className="text-muted-foreground">Креативный специалист.</span>
               </h1>
               <p className="text-xl text-muted-foreground mt-6">
-                Создаю фото, видео, сайты и креативы — от идеи до реализации
+                Монтирую видео, создаю сайты и креативы для бизнеса и соцсетей
               </p>
             </div>
 
