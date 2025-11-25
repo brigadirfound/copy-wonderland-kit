@@ -5,7 +5,6 @@ const HeroSection = () => {
     { emoji: "🎬", title: "Video Producer", description: "Монтаж видео для соцсетей и бизнеса" },
     { emoji: "💻", title: "Web Developer", description: "Создание лендингов и сайтов на Tilda и не только" },
     { emoji: "✨", title: "Creative Specialist", description: "Создание креативов и визуального контента" },
-    { emoji: "📋", title: "Content Manager", description: "Управление контентом и визуальной стратегией" },
     { emoji: "🎨", title: "Digital Creator", description: "Создание и публикация разнообразного цифрового контента" },
   ];
 
