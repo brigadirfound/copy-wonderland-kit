@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mail, MapPin, Send, Github, Instagram, Linkedin } from "lucide-react";
+import { Mail, MapPin, Send } from "lucide-react";
 
 const Contact = () => {
   const contactMethods = [
@@ -26,11 +26,6 @@ const Contact = () => {
     }
   ];
 
-  const socialLinks = [
-    { icon: Github, label: "GitHub", url: "https://github.com" },
-    { icon: Instagram, label: "Instagram", url: "https://instagram.com" },
-    { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com" }
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -94,27 +89,6 @@ const Contact = () => {
                     </Card>
                   );
                 })}
-              </div>
-
-              {/* Social Links */}
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-4">Социальные сети</h3>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social, index) => {
-                    const IconComponent = social.icon;
-                    return (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        size="icon"
-                        className="border-border hover:border-primary hover:bg-primary/10"
-                        onClick={() => window.open(social.url, '_blank')}
-                      >
-                        <IconComponent className="h-5 w-5" />
-                      </Button>
-                    );
-                  })}
-                </div>
               </div>
 
               {/* Availability */}
