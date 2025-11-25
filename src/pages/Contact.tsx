@@ -35,7 +35,20 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-20 pb-16">
+      
+      {/* Fixed Mobile CTA Button */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)]">
+        <Button
+          size="lg"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg text-base py-6"
+          onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
+        >
+          <Send className="w-5 h-5 mr-2" />
+          Написать в Телеграм
+        </Button>
+      </div>
+      
+      <main className="pt-20 pb-24 md:pb-16">
         <div className="container mx-auto px-6">
           {/* Header Section */}
           <div className="py-16 text-center">
