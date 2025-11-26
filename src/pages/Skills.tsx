@@ -1,28 +1,32 @@
 import Header from "@/components/Header";
 import { Card } from "@/components/ui/card";
+import tiktokIcon from "@/assets/tiktok-icon.png";
+import codeIcon from "@/assets/code-icon.png";
+import creativeIcon from "@/assets/creative-icon.png";
+import digitalIcon from "@/assets/digital-icon.png";
 
 const Skills = () => {
   const skillCards = [
     {
-      emoji: "🎬",
+      icon: tiktokIcon,
       title: "Видеомонтаж",
       description: "Монтаж видео для соцсетей и бизнеса. Работаю в Adobe Premiere Pro и CapCut. От сырых кадров до финального экспорта.",
       learning: "Motion-дизайн (After Effects) и AI-инструменты для видео"
     },
     {
-      emoji: "🌐",
+      icon: codeIcon,
       title: "Веб-разработка",
       description: "Создание лендингов и сайтов на Tilda — от макета до запуска. Интеграции с платёжными системами, формами обратной связи и аналитикой. Адаптивный дизайн под все устройства.",
       learning: "Webflow и углублённый UX/UI"
     },
     {
-      emoji: "🎨",
+      icon: creativeIcon,
       title: "Креативный дизайн",
       description: "Создание баннеров, креативов для соцсетей и визуального контента. Работаю в Photoshop и Figma — быстро создаю серии из 10-20 креативов для рекламных кампаний.",
       learning: "AI-генерация визуалов и брендинг"
     },
     {
-      emoji: "🛠",
+      icon: digitalIcon,
       title: "Управление проектами",
       description: "Организация работы от идеи до реализации. Чёткая коммуникация с клиентами, работа с дедлайнами, понимание бизнес-задач и адаптация под цели проекта.",
       learning: "Agile-методологии и системы управления проектами"
@@ -53,7 +57,7 @@ const Skills = () => {
             {skillCards.map((skill, index) => (
               <Card key={index} className="p-8 border border-border hover:border-accent transition-all duration-300 hover:shadow-lg flex flex-col">
                 <div className="space-y-4 flex-1">
-                  <div className="text-5xl mb-4">{skill.emoji}</div>
+                  <img src={skill.icon} alt={skill.title} className="w-12 h-12 mb-4 brightness-0 invert" />
                   <h3 className="text-2xl font-bold text-foreground">{skill.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     {skill.description}
