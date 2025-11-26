@@ -35,7 +35,7 @@ const HeroSection = () => {
               {skills.map((skill, index) => (
                 <div
                   key={index}
-                  className="flex items-start space-x-3 md:space-x-4 p-3 md:p-4 rounded-lg bg-card hover:bg-card-hover transition-colors duration-200 cursor-pointer group"
+                  className="flex items-center space-x-3 md:space-x-4 p-3 md:p-4 rounded-lg bg-card hover:bg-card-hover transition-colors duration-200 cursor-pointer group"
                 >
                   <img src={skill.icon} alt={skill.title} className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0" />
                   <div className="min-w-0">
