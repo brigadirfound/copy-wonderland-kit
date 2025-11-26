@@ -1,12 +1,13 @@
 import heroPortrait from "@/assets/hero-portrait-new.jpg";
 import tiktokIcon from "@/assets/tiktok-icon.png";
 import codeIcon from "@/assets/code-icon.png";
+import creativeIcon from "@/assets/creative-icon.png";
 
 const HeroSection = () => {
   const skills = [
     { icon: tiktokIcon, title: "Video Producer", description: "Монтаж видео для соцсетей и бизнеса" },
     { icon: codeIcon, title: "Web Developer", description: "Создание лендингов и сайтов на Tilda и не только" },
-    { emoji: "✨", title: "Creative Specialist", description: "Создание креативов и визуального контента" },
+    { icon: creativeIcon, title: "Creative Specialist", description: "Создание креативов и визуального контента" },
     { emoji: "🎨", title: "Digital Creator", description: "Создание и публикация разнообразного цифрового контента" },
   ];
 
