@@ -1,8 +1,9 @@
 import heroPortrait from "@/assets/hero-portrait-new.jpg";
+import tiktokIcon from "@/assets/tiktok-icon.png";
 
 const HeroSection = () => {
   const skills = [
-    { emoji: "🎬", title: "Video Producer", description: "Монтаж видео для соцсетей и бизнеса" },
+    { icon: tiktokIcon, title: "Video Producer", description: "Монтаж видео для соцсетей и бизнеса" },
     { emoji: "💻", title: "Web Developer", description: "Создание лендингов и сайтов на Tilda и не только" },
     { emoji: "✨", title: "Creative Specialist", description: "Создание креативов и визуального контента" },
     { emoji: "🎨", title: "Digital Creator", description: "Создание и публикация разнообразного цифрового контента" },
@@ -33,7 +34,11 @@ const HeroSection = () => {
                   key={index}
                   className="flex items-start space-x-3 md:space-x-4 p-3 md:p-4 rounded-lg bg-card hover:bg-card-hover transition-colors duration-200 cursor-pointer group"
                 >
-                  <span className="text-xl md:text-2xl flex-shrink-0">{skill.emoji}</span>
+                  {skill.icon ? (
+                    <img src={skill.icon} alt={skill.title} className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0" />
+                  ) : (
+                    <span className="text-xl md:text-2xl flex-shrink-0">{skill.emoji}</span>
+                  )}
                   <div className="min-w-0">
                     <h3 className="text-base md:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                       {skill.title}
