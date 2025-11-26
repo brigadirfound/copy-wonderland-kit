@@ -68,7 +68,7 @@ const Contact = () => {
                       <div className="space-y-3">
                         <div className="bg-primary/10 p-3 rounded-lg w-fit">
                           {IconComponent === "telegram" ? (
-                            <img src={telegramIcon} alt="Telegram" className="h-6 w-6 brightness-0" />
+                            <img src={telegramIcon} alt="Telegram" className="h-6 w-6 brightness-0 invert" />
                           ) : (
                             <IconComponent className="h-6 w-6 text-primary" />
                           )}
