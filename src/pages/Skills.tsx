@@ -93,7 +93,7 @@ const Skills = () => {
           {/* Learning Philosophy */}
           <div className="mt-12 max-w-5xl mx-auto">
             <Card className="p-8 border border-border bg-primary/5">
-              <h3 className="text-xl font-bold text-foreground mb-4">📚 Постоянное развитие</h3>
+              <h3 className="text-xl font-bold text-foreground mb-4">Постоянное развитие</h3>
               <p className="text-muted-foreground leading-relaxed">
                 Регулярно прохожу курсы по видеомонтажу, веб-дизайну и новым AI-инструментам. Слежу за трендами в digital-индустрии и экспериментирую с emerging-технологиями.
               </p>
