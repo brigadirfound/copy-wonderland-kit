@@ -105,7 +105,7 @@ const PortfolioSection = () => {
                 rel="noopener noreferrer"
                 className="bg-primary text-primary-foreground px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2 text-sm sm:text-base"
               >
-                <img src={telegramIcon} alt="Telegram" className="w-4 h-4 sm:w-5 sm:h-5 brightness-0 invert" />
+                <img src={telegramIcon} alt="Telegram" className="w-4 h-4 sm:w-5 sm:h-5" />
                 Написать в Телеграм
               </a>
             </div>
