@@ -1,7 +1,8 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mail, MapPin, Send } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import telegramIcon from "@/assets/telegram-icon.png";
 
 const Contact = () => {
   const contactMethods = [
@@ -12,7 +13,7 @@ const Contact = () => {
       description: "Отвечу в течение 24 часов"
     },
     {
-      icon: Send,
+      icon: "telegram",
       title: "Telegram",
       value: "@brigadirfound",
       description: "Быстрый способ связи",
@@ -46,7 +47,7 @@ const Contact = () => {
               className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6"
               onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
             >
-              <Send className="w-5 h-5 mr-2" />
+              <img src={telegramIcon} alt="Telegram" className="w-5 h-5 mr-2" />
               Написать в Телеграм
             </Button>
           </div>
@@ -66,7 +67,11 @@ const Contact = () => {
                     >
                       <div className="space-y-3">
                         <div className="bg-primary/10 p-3 rounded-lg w-fit">
-                          <IconComponent className="h-6 w-6 text-primary" />
+                          {IconComponent === "telegram" ? (
+                            <img src={telegramIcon} alt="Telegram" className="h-6 w-6" />
+                          ) : (
+                            <IconComponent className="h-6 w-6 text-primary" />
+                          )}
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-foreground">{method.title}</h3>

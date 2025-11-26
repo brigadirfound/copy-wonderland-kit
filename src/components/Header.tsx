@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Send, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import telegramIcon from "@/assets/telegram-icon.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const Header = () => {
                 className="text-muted-foreground hover:text-foreground"
                 onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
               >
-                <Send className="h-5 w-5" />
+                <img src={telegramIcon} alt="Telegram" className="h-5 w-5" />
               </Button>
             </div>
 
@@ -92,7 +93,7 @@ const Header = () => {
                       className="text-muted-foreground hover:text-foreground"
                       onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
                     >
-                      <Send className="h-5 w-5" />
+                      <img src={telegramIcon} alt="Telegram" className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
