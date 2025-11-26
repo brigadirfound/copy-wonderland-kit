@@ -59,7 +59,7 @@ const Header = () => {
                 className="text-muted-foreground hover:text-foreground"
                 onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
               >
-                <img src={telegramIcon} alt="Telegram" className="h-5 w-5" />
+                <img src={telegramIcon} alt="Telegram" className="h-5 w-5 brightness-0" />
               </Button>
             </div>
 
@@ -93,7 +93,7 @@ const Header = () => {
                       className="text-muted-foreground hover:text-foreground"
                       onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
                     >
-                      <img src={telegramIcon} alt="Telegram" className="h-5 w-5" />
+                      <img src={telegramIcon} alt="Telegram" className="h-5 w-5 brightness-0" />
                     </Button>
                   </div>
                 </div>
