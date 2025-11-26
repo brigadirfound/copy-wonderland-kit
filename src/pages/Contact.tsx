@@ -47,7 +47,7 @@ const Contact = () => {
               className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6"
               onClick={() => window.open('https://t.me/brigadirfound', '_blank')}
             >
-              <img src={telegramIcon} alt="Telegram" className="w-5 h-5 mr-2" />
+              <img src={telegramIcon} alt="Telegram" className="w-5 h-5 mr-2 brightness-0 invert" />
               Написать в Телеграм
             </Button>
           </div>
@@ -68,7 +68,7 @@ const Contact = () => {
                       <div className="space-y-3">
                         <div className="bg-primary/10 p-3 rounded-lg w-fit">
                           {IconComponent === "telegram" ? (
-                            <img src={telegramIcon} alt="Telegram" className="h-6 w-6" />
+                            <img src={telegramIcon} alt="Telegram" className="h-6 w-6 brightness-0" />
                           ) : (
                             <IconComponent className="h-6 w-6 text-primary" />
                           )}

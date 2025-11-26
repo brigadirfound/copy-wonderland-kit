@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Send } from 'lucide-react';
+import telegramIcon from "@/assets/telegram-icon.png";
 
 interface CaseItem {
   id: string;
@@ -105,7 +105,7 @@ const PortfolioSection = () => {
                 rel="noopener noreferrer"
                 className="bg-primary text-primary-foreground px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2 text-sm sm:text-base"
               >
-                <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                <img src={telegramIcon} alt="Telegram" className="w-4 h-4 sm:w-5 sm:h-5 brightness-0 invert" />
                 Написать в Телеграм
               </a>
             </div>
