@@ -11,7 +11,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: "Обо мне", href: "/" },
+    { label: "Главная", href: "/" },
     { label: "Кейсы", href: "/cases" },
     { label: "Навыки", href: "/skills" },
     { label: "Связаться", href: "/contact" },
