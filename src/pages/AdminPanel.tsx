@@ -21,6 +21,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { z } from 'zod';
+import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
 
 interface CaseItem {
   id: string;
@@ -350,6 +351,11 @@ export default function AdminPanel() {
       </header>
 
       <main className="container mx-auto px-6 py-8">
+        {/* Analytics Dashboard */}
+        <div className="mb-12">
+          <AnalyticsDashboard />
+        </div>
+
         {/* Controls */}
         <div className="flex justify-between items-center mb-8">
           <div>
