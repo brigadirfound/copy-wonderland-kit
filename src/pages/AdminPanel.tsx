@@ -72,6 +72,8 @@ export default function AdminPanel() {
   const [isCreating, setIsCreating] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [useVideoFile, setUseVideoFile] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [useImageFile, setUseImageFile] = useState(false);
   const [formData, setFormData] = useState<Omit<CaseItem, 'id'>>({
     title: '',
     description: '',
@@ -242,6 +244,67 @@ export default function AdminPanel() {
     setFormData({ ...formData, additional_images: imagesArray });
   };
 
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: 'Ошибка',
+        description: 'Пожалуйста, выберите изображение',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'Ошибка',
+        description: 'Размер файла не должен превышать 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = fileName;
+
+      // Upload to Supabase Storage
+      const { error: uploadError, data } = await supabase.storage
+        .from('case-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('case-images')
+        .getPublicUrl(filePath);
+
+      setFormData({ ...formData, image: publicUrl });
+      
+      toast({
+        title: 'Успешно',
+        description: 'Изображение загружено',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Ошибка загрузки',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -390,13 +453,73 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <Label htmlFor="image">Ссылка на изображение</Label>
-                  <Input
-                    id="image"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="image">Обложка</Label>
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="image-type" className="text-xs text-muted-foreground">
+                        {useImageFile ? 'Загрузить файл' : 'Вставить ссылку'}
+                      </Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setUseImageFile(!useImageFile);
+                          setFormData({ ...formData, image: '' });
+                        }}
+                      >
+                        {useImageFile ? 'Использовать ссылку' : 'Загрузить файл'}
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {useImageFile ? (
+                    <div className="space-y-2">
+                      <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploadingImage}
+                      />
+                      {uploadingImage && (
+                        <p className="text-xs text-muted-foreground">
+                          Загрузка изображения...
+                        </p>
+                      )}
+                      {formData.image && !uploadingImage && (
+                        <div className="space-y-2">
+                          <p className="text-xs text-green-600">
+                            ✓ Изображение загружено
+                          </p>
+                          <img 
+                            src={formData.image} 
+                            alt="Preview" 
+                            className="w-32 h-32 object-cover rounded-md border border-border"
+                          />
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground">
+                        Максимальный размер: 10MB. Поддерживаемые форматы: JPG, PNG, WebP
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Input
+                        id="image"
+                        value={formData.image}
+                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                        placeholder="https://example.com/image.jpg"
+                      />
+                      {formData.image && (
+                        <img 
+                          src={formData.image} 
+                          alt="Preview" 
+                          className="w-32 h-32 object-cover rounded-md border border-border"
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div>
