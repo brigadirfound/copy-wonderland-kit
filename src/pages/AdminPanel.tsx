@@ -18,7 +18,10 @@ import {
   Calendar,
   Eye,
   ArrowLeft,
-  LogOut
+  LogOut,
+  ArrowUp,
+  ArrowDown,
+  Upload
 } from 'lucide-react';
 import { z } from 'zod';
 import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
@@ -242,6 +245,92 @@ export default function AdminPanel() {
   const handleAdditionalImagesChange = (value: string) => {
     const imagesArray = value.split('\n').map(url => url.trim()).filter(url => url !== '');
     setFormData({ ...formData, additional_images: imagesArray });
+  };
+
+  const handleAdditionalImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: 'Ошибка',
+        description: 'Пожалуйста, выберите изображение',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'Ошибка',
+        description: 'Размер файла не должен превышать 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = fileName;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('case-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('case-images')
+        .getPublicUrl(filePath);
+
+      setFormData({ 
+        ...formData, 
+        additional_images: [...formData.additional_images, publicUrl]
+      });
+      
+      toast({
+        title: 'Успешно',
+        description: 'Изображение добавлено',
+      });
+
+      // Reset file input
+      event.target.value = '';
+    } catch (error: any) {
+      toast({
+        title: 'Ошибка загрузки',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    const newImages = formData.additional_images.filter((_, i) => i !== index);
+    setFormData({ ...formData, additional_images: newImages });
+  };
+
+  const moveAdditionalImageUp = (index: number) => {
+    if (index === 0) return;
+    const newImages = [...formData.additional_images];
+    [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
+    setFormData({ ...formData, additional_images: newImages });
+  };
+
+  const moveAdditionalImageDown = (index: number) => {
+    if (index === formData.additional_images.length - 1) return;
+    const newImages = [...formData.additional_images];
+    [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
+    setFormData({ ...formData, additional_images: newImages });
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -625,17 +714,102 @@ export default function AdminPanel() {
                 </div>
 
                 <div>
-                  <Label htmlFor="additional_images">Дополнительные изображения (каждая ссылка с новой строки)</Label>
-                  <Textarea
-                    id="additional_images"
-                    value={formData.additional_images.join('\n')}
-                    onChange={(e) => handleAdditionalImagesChange(e.target.value)}
-                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
-                    rows={4}
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Каждая ссылка на изображение с новой строки для галереи проекта
-                  </p>
+                  <Label htmlFor="additional_images">Дополнительные изображения</Label>
+                  
+                  {/* Upload button */}
+                  <div className="mb-4">
+                    <Input
+                      id="additional_images_file"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAdditionalImageUpload}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('additional_images_file')?.click()}
+                      disabled={uploadingImage}
+                      className="w-full"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {uploadingImage ? 'Загрузка...' : 'Загрузить изображение'}
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Максимальный размер: 10MB
+                    </p>
+                  </div>
+
+                  {/* Image list with sorting */}
+                  {formData.additional_images.length > 0 && (
+                    <div className="space-y-2">
+                      {formData.additional_images.map((imageUrl, index) => (
+                        <div 
+                          key={index}
+                          className="flex items-center space-x-2 p-2 border border-border rounded-md bg-card"
+                        >
+                          <img 
+                            src={imageUrl} 
+                            alt={`Additional ${index + 1}`}
+                            className="w-16 h-16 object-cover rounded border border-border"
+                          />
+                          <div className="flex-1 truncate text-xs text-muted-foreground">
+                            Изображение {index + 1}
+                          </div>
+                          <div className="flex space-x-1">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveAdditionalImageUp(index)}
+                              disabled={index === 0}
+                              className="h-8 w-8"
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveAdditionalImageDown(index)}
+                              disabled={index === formData.additional_images.length - 1}
+                              className="h-8 w-8"
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeAdditionalImage(index)}
+                              className="h-8 w-8 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* URL input as fallback */}
+                  <details className="mt-4">
+                    <summary className="text-xs text-muted-foreground cursor-pointer hover:text-foreground">
+                      Или добавьте ссылки вручную
+                    </summary>
+                    <Textarea
+                      id="additional_images_urls"
+                      value={formData.additional_images.join('\n')}
+                      onChange={(e) => handleAdditionalImagesChange(e.target.value)}
+                      placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                      rows={3}
+                      className="mt-2"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Каждая ссылка с новой строки
+                    </p>
+                  </details>
                 </div>
               </div>
             </div>
