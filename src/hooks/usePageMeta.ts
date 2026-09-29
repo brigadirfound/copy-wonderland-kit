@@ -3,7 +3,7 @@ import { site } from "@/content/site";
 
 const DEFAULT_TITLE = `${site.brand} — сайты, боты и AI-контент на скорости нейросетей`;
 const DEFAULT_DESCRIPTION =
-  "Делаю сайты, приложения, Telegram-ботов и AI-контент под ключ. Техподдержка онлайн-школ на GetCourse. Сайты — от 30 000 ₽, контент — от 5 000 ₽.";
+  "Делаю сайты, приложения, игры, Telegram-ботов и AI-контент под ключ. В разработке с 2016 года. Сайты — от 15 000 ₽, контент — от 1 000 ₽.";
 
 /** Заголовок вкладки и описание страницы. */
 export function usePageMeta(title?: string, description?: string) {

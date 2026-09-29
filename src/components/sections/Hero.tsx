@@ -55,7 +55,7 @@ function SplitWords({ text, delay = 0 }: { text: string; delay?: number }) {
 const floatingChips: { icon: LucideIcon; title: string; meta: string; className: string; float: number }[] = [
   { icon: Play, title: "AI-Shorts", meta: "428 тыс. просмотров", className: "right-[6%] top-[22%]", float: 6 },
   { icon: Bot, title: "Telegram-бот", meta: "Новая заявка · сейчас", className: "right-[24%] top-[40%]", float: 7 },
-  { icon: MonitorSmartphone, title: "Лендинг", meta: "от 30 000 ₽", className: "right-[4%] top-[57%]", float: 5.5 },
+  { icon: MonitorSmartphone, title: "Лендинг", meta: "от 15 000 ₽", className: "right-[4%] top-[57%]", float: 5.5 },
   { icon: GraduationCap, title: "GetCourse", meta: "Доступ открыт ✓", className: "right-[20%] top-[74%]", float: 6.5 },
 ];
 
@@ -148,7 +148,7 @@ export default function Hero() {
           </ButtonLink>
         </m.div>
 
-        <m.dl {...motionProps(0.7)} className="mt-14 grid max-w-2xl grid-cols-3 gap-4 border-t border-white/10 pt-6">
+        <m.dl {...motionProps(0.7)} className="mt-14 grid max-w-3xl grid-cols-2 gap-x-4 gap-y-5 border-t border-white/10 pt-6 sm:grid-cols-4">
           {hero.facts.map((fact) => (
             <div key={fact.label}>
               <dt className="eyebrow text-[10px] sm:text-xs">{fact.label}</dt>
