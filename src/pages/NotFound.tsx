@@ -1,24 +1,26 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { ButtonLink } from "@/components/ButtonLink";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
+export default function NotFound() {
+  usePageMeta("Страница не найдена");
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-gray-600">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 underline hover:text-blue-700">
-          Return to Home
-        </a>
+    <section className="relative isolate flex min-h-[85svh] items-center overflow-hidden">
+      <div className="glow-fallback absolute inset-0 -z-10 opacity-60" />
+      <div className="grain" />
+      <div className="container-page py-32 text-center">
+        <p className="font-display text-[clamp(6rem,26vw,16rem)] font-semibold leading-none tracking-tighter text-primary">404</p>
+        <h1 className="display-md mt-6">Такой страницы нет</h1>
+        <p className="mx-auto mt-4 max-w-md text-muted-foreground">
+          Возможно, ссылка устарела. Зато есть кейсы и способ со мной связаться.
+        </p>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <ButtonLink to="/">На главную</ButtonLink>
+          <ButtonLink to="/cases" variant="secondary">
+            Смотреть кейсы
+          </ButtonLink>
+        </div>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default NotFound;
+}

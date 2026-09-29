@@ -1,49 +1,32 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
-import { usePageTracking } from "./hooks/usePageTracking";
-import Index from "./pages/Index";
-import Cases from "./pages/Cases";
+import { LazyMotion, MotionConfig, domAnimation } from "framer-motion";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import { MetrikaTracker, ScrollManager } from "./components/layout/RouteEffects";
 import CaseDetail from "./pages/CaseDetail";
-import Skills from "./pages/Skills";
-import Contact from "./pages/Contact";
-import AdminPanel from "./pages/AdminPanel";
-import Auth from "./pages/Auth";
+import Cases from "./pages/Cases";
+import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-const PageTracker = () => {
-  usePageTracking();
-  return null;
-};
-
-const queryClient = new QueryClient();
-
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+  <LazyMotion features={domAnimation} strict>
+    <MotionConfig reducedMotion="user">
       <BrowserRouter>
-        <PageTracker />
-        <AuthProvider>
+        <ScrollManager />
+        <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/cases" element={<Cases />} />
-            <Route path="/cases/:id" element={<CaseDetail />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/panel" element={<AdminPanel />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/cases/:slug" element={<CaseDetail />} />
+            {/* Старые адреса */}
+            <Route path="/skills" element={<Navigate to="/#about" replace />} />
+            <Route path="/contact" element={<Navigate to="/#contact" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </AuthProvider>
+        </Layout>
+        <MetrikaTracker />
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+    </MotionConfig>
+  </LazyMotion>
 );
 
 export default App;
