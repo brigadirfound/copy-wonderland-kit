@@ -41,7 +41,7 @@ export default function About() {
             ))}
           </div>
 
-          <ul className="mt-12 grid gap-4 sm:grid-cols-3">
+          <ul className="mt-12 grid gap-4 sm:grid-cols-2">
             {about.facts.map((fact, i) => (
               <Reveal
                 as="li"
