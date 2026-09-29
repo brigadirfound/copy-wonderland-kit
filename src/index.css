@@ -1,91 +1,202 @@
+@import "@fontsource-variable/unbounded";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/jetbrains-mono";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Marco Wonderland inspired design system - Dark minimalist theme */
-
+/*
+ * Дизайн-система: тёмная тема + один яркий акцент (лайм).
+ */
 @layer base {
   :root {
-    /* Dark theme colors - main palette */
-    --background: 0 0% 6%;
-    --foreground: 0 0% 98%;
+    --background: 240 8% 4%;
+    --foreground: 240 10% 96%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 6% 7%;
+    --card-foreground: 240 10% 96%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 6% 7%;
+    --popover-foreground: 240 10% 96%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 6%;
+    --primary: 76 100% 59%;
+    --primary-foreground: 240 10% 4%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 88%;
+    --secondary: 240 5% 11%;
+    --secondary-foreground: 240 10% 90%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 240 5% 11%;
+    --muted-foreground: 240 5% 64%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 5% 13%;
+    --accent-foreground: 240 10% 96%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 88%;
+    --border: 240 5% 15%;
+    --input: 240 5% 15%;
+    --ring: 76 100% 59%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Portfolio specific colors */
-    --hero-gradient: linear-gradient(135deg, hsl(0 0% 6%), hsl(0 0% 8%));
-    --nav-blur: hsla(0, 0%, 6%, 0.8);
-    --card-hover: 0 0% 10%;
-    
-    /* Typography scale */
-    --font-size-hero: 4rem;
-    --font-size-large: 2.5rem;
-    --font-size-medium: 1.25rem;
-    
-    /* Spacing scale */
-    --space-hero: 8rem;
-    --space-section: 6rem;
-    --space-card: 2rem;
-    
-    /* Animation */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease-out;
+    --header-h: 4rem;
+
+    /* Цвета свечения для градиентов (совпадают с WebGL-фоном) */
+    --glow-1: 258 100% 60%;
+    --glow-2: 218 100% 55%;
   }
 
-  /* Force dark mode always - like Marco's site */
-  .dark,
-  * {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 6%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 88%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 70%;
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 88%;
-  }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  section[id] {
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground;
+  }
+
+  .display-xl {
+    @apply font-display font-semibold tracking-[-0.035em];
+    /* учитываем и высоту экрана, чтобы первый экран влезал на ноутбуках */
+    font-size: clamp(2.1rem, min(8vw, 11.5vh), 6rem);
+    font-size: clamp(2.1rem, min(8vw, 11.5svh), 6rem);
+    line-height: 1.02;
+  }
+
+  .display-lg {
+    @apply font-display font-semibold tracking-[-0.03em];
+    font-size: clamp(1.85rem, 5.4vw, 4rem);
+    line-height: 1.05;
+  }
+
+  .display-md {
+    @apply font-display font-semibold tracking-[-0.02em];
+    font-size: clamp(1.35rem, 2.6vw, 2rem);
+    line-height: 1.15;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Мягкая «зернистость» поверх градиентов */
+  .grain {
+    @apply pointer-events-none absolute inset-0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.07;
+  }
+
+  /* Подсветка карточки под курсором (координаты задаёт JS) */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--spot-x, 50%) var(--spot-y, -20%),
+      hsl(var(--primary) / 0.12),
+      transparent 45%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  .glow-fallback {
+    background:
+      radial-gradient(55% 45% at 78% 32%, hsl(var(--glow-1) / 0.55), transparent 70%),
+      radial-gradient(35% 35% at 62% 18%, hsl(var(--glow-2) / 0.45), transparent 70%),
+      radial-gradient(30% 30% at 90% 55%, hsl(var(--primary) / 0.18), transparent 70%);
+  }
+
+  .cta-glow {
+    background:
+      radial-gradient(60% 70% at 50% 115%, hsl(var(--glow-1) / 0.65), transparent 70%),
+      radial-gradient(40% 50% at 12% 105%, hsl(var(--glow-2) / 0.5), transparent 70%),
+      radial-gradient(35% 45% at 88% 100%, hsl(var(--glow-1) / 0.4), transparent 70%);
+  }
+
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px hsl(var(--foreground) / 0.35);
+  }
+}
+
+@layer utilities {
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(74 222 128 / 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgb(74 222 128 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(74 222 128 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }

@@ -1,112 +1,81 @@
-import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Tag } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import CaseCard from "@/components/cases/CaseCard";
+import Reveal from "@/components/motion/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import FinalCta from "@/components/sections/FinalCta";
+import { cases, categoryLabels } from "@/content/cases";
+import type { ServiceId } from "@/content/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { cn } from "@/lib/utils";
 
-interface CaseItem {
-  id: string;
-  title: string;
-  description: string;
-  image?: string;
-  tags: string[];
-  date: string;
-  link?: string;
-  featured: boolean;
-}
+type Filter = "all" | ServiceId;
 
-const Cases = () => {
-  const [cases, setCases] = useState<CaseItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+const filters: { id: Filter; label: string }[] = [
+  { id: "all", label: "Все" },
+  ...(Object.keys(categoryLabels) as ServiceId[]).map((id) => ({ id, label: categoryLabels[id] })),
+];
 
-  useEffect(() => {
-    loadCases();
-  }, []);
+const isFilter = (value: string | null): value is Filter => filters.some((f) => f.id === value);
 
-  const loadCases = async () => {
-    const { data, error } = await supabase.from("cases").select("*").order("created_at", { ascending: false });
+export default function Cases() {
+  usePageMeta("Кейсы", "AI-видео, креативы для брендов, сайты и онлайн-школы на GetCourse — кейсы Макса Бригадира.");
 
-    if (!error && data) {
-      setCases(data);
-    }
-    setLoading(false);
+  const [params, setParams] = useSearchParams();
+  const raw = params.get("type");
+  const active: Filter = isFilter(raw) ? raw : "all";
+  const list = active === "all" ? cases : cases.filter((item) => item.category === active);
+
+  const countFor = (id: Filter) => (id === "all" ? cases.length : cases.filter((item) => item.category === id).length);
+
+  const select = (id: Filter) => {
+    const next = new URLSearchParams(params);
+    if (id === "all") next.delete("type");
+    else next.set("type", id);
+    setParams(next, { replace: true, preventScrollReset: true });
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="pt-20 pb-16">
-        <div className="container mx-auto px-6">
-          {/* Header Section */}
-          <div className="py-16 text-center">
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">Мои Кейсы</h1>
-            <div className="max-w-3xl mx-auto text-center space-y-2">
-              <p className="text-xl text-muted-foreground">
-                Портфолио проектов, над которыми я работал.
-              </p>
-              <p className="text-xl text-muted-foreground">
-                От концепции до реализации — каждый проект отражает мой подход к созданию качественных цифровых решений.
-              </p>
-            </div>
-          </div>
+    <>
+      <section className="container-page pb-8 pt-[calc(var(--header-h)+4rem)] sm:pt-[calc(var(--header-h)+6rem)]">
+        <SectionHeading
+          as="h1"
+          eyebrow="Портфолио"
+          title="Кейсы"
+          lead="Сайты, AI-видео, креативы для брендов и онлайн-школы. Работы под NDA — без подробностей, примеры покажу лично."
+        />
 
-          {/* All Cases */}
-          <div>
-            <h2 className="text-2xl font-bold text-foreground mb-8">Все проекты</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {cases.map((caseItem) => (
-                <a key={caseItem.id} href={`/cases/${caseItem.id}`} className="group cursor-pointer h-full">
-                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-accent transition-all duration-300 transform hover:scale-105 flex flex-col h-full">
-                    <div className="aspect-video bg-muted relative overflow-hidden">
-                      {caseItem.image ? (
-                        <img src={caseItem.image} alt={caseItem.title} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
-                          <span className="text-4xl text-muted-foreground">🚀</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="space-y-3 flex-1">
-                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                          {caseItem.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">{caseItem.description}</p>
-                      </div>
-                      <div className="pt-4 border-t border-border mt-4">
-                        <p className="text-sm text-muted-foreground">Посмотреть проект →</p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+        <Reveal delay={0.15} className="mt-10 flex flex-wrap gap-2" >
+          {filters.map((filter) => (
+            <button
+              key={filter.id}
+              type="button"
+              onClick={() => select(filter.id)}
+              aria-pressed={active === filter.id}
+              className={cn(
+                "inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-300",
+                active === filter.id
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-white/10 bg-white/[0.03] text-muted-foreground hover:border-white/25 hover:text-foreground",
+              )}
+            >
+              {filter.label}
+              <span className={cn("font-mono text-xs", active === filter.id ? "opacity-70" : "opacity-60")}>
+                {countFor(filter.id)}
+              </span>
+            </button>
+          ))}
+        </Reveal>
 
-          {/* Empty State */}
-          {!loading && cases.length === 0 && (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">📂</div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Пока нет кейсов</h3>
-              <p className="text-muted-foreground">
-                Кейсы будут отображаться здесь после добавления через админ панель
-              </p>
-            </div>
-          )}
-
-          {loading && (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground">Загрузка кейсов...</p>
-            </div>
-          )}
+        <div key={active} className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {list.map((item, i) => (
+            <Reveal key={item.slug} delay={(i % 3) * 0.06}>
+              <CaseCard item={item} />
+            </Reveal>
+          ))}
         </div>
-      </main>
-    </div>
-  );
-};
+      </section>
 
-export default Cases;
+      <FinalCta />
+    </>
+  );
+}

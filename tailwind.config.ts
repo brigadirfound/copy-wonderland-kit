@@ -1,20 +1,23 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1280px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Unbounded Variable"', "system-ui", "sans-serif"],
+        sans: ['"Manrope Variable"', "system-ui", "-apple-system", "sans-serif"],
+        mono: ['"JetBrains Mono Variable"', "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,70 +53,29 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Portfolio specific colors
-        "hero-gradient": "var(--hero-gradient)",
-        "nav-blur": "var(--nav-blur)",
-        "card-hover": "hsl(var(--card-hover))",
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-      },
-      spacing: {
-        "space-hero": "var(--space-hero)",
-        "space-section": "var(--space-section)",
-        "space-card": "var(--space-card)",
-      },
-      fontSize: {
-        "hero": "var(--font-size-hero)",
-        "large": "var(--font-size-large)", 
-        "medium": "var(--font-size-medium)",
-      },
-      backgroundImage: {
-        "hero-gradient": "var(--hero-gradient)",
-      },
-      backgroundColor: {
-        "nav-blur": "var(--nav-blur)",
-        "card-hover": "hsl(var(--card-hover))",
-      },
-      transitionTimingFunction: {
-        "smooth": "var(--transition-smooth)",
-        "fast": "var(--transition-fast)",
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 8px)",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down 0.25s ease-out",
+        "accordion-up": "accordion-up 0.25s ease-out",
+        marquee: "marquee var(--marquee-duration, 40s) linear infinite",
+        "pulse-dot": "pulse-dot 2s ease-out infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 } satisfies Config;
