@@ -7,8 +7,7 @@
 @tailwind utilities;
 
 /*
- * Дизайн-система: тёмная тема + один яркий акцент.
- * Акцент задаётся «луком» (data-look на <html>): lime / ocean / sunset.
+ * Дизайн-система: тёмная тема + один яркий акцент (лайм).
  */
 @layer base {
   :root {
@@ -49,19 +48,6 @@
     --glow-2: 218 100% 55%;
   }
 
-  :root[data-look="ocean"] {
-    --primary: 218 100% 66%;
-    --ring: 218 100% 66%;
-    --glow-1: 226 86% 47%;
-    --glow-2: 186 100% 47%;
-  }
-
-  :root[data-look="sunset"] {
-    --primary: 18 100% 60%;
-    --ring: 18 100% 60%;
-    --glow-1: 345 78% 49%;
-    --glow-2: 22 100% 58%;
-  }
 
   * {
     @apply border-border;

@@ -9,17 +9,15 @@ export default function About() {
     <section id="about" className="container-page py-20 sm:py-28">
       <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
         <Reveal className="relative mx-auto w-full max-w-md lg:sticky lg:top-28">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10 bg-card">
+          <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-white/10 bg-card">
             <img
               src={portrait}
               alt={`${site.name} — ${site.brand}`}
-              width={800}
-              height={800}
+              width={640}
+              height={640}
               loading="lazy"
-              className="h-full w-full object-cover object-[50%_35%] grayscale contrast-[1.1] brightness-90"
+              className="h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-[hsl(var(--glow-1)/0.3)] mix-blend-color" />
-            <div className="grain" />
             <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background/90 to-transparent" />
             <div className="absolute inset-x-5 bottom-5 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-background/60 px-3 py-1.5 text-xs backdrop-blur-md">

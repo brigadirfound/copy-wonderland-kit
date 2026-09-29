@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BG_RGB, currentLook, lookPalettes } from "@/lib/look";
+import { BG_RGB, HERO_GLOWS } from "@/lib/palette";
 import { cn } from "@/lib/utils";
 
 const VERTEX = `
@@ -150,7 +150,7 @@ export default function HeroBackground({ className }: HeroBackgroundProps) {
 
     const uRes = gl.getUniformLocation(program, "uRes");
     const uTime = gl.getUniformLocation(program, "uTime");
-    const [c1, c2, c3] = lookPalettes[currentLook()];
+    const [c1, c2, c3] = HERO_GLOWS;
     gl.uniform3f(gl.getUniformLocation(program, "uBg"), ...BG_RGB);
     gl.uniform3f(gl.getUniformLocation(program, "uC1"), ...c1);
     gl.uniform3f(gl.getUniformLocation(program, "uC2"), ...c2);
