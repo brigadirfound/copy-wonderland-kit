@@ -8,14 +8,14 @@
 #   - ставит веб-сервер Caddy (сам получает и продлевает HTTPS), fail2ban и файрвол;
 #   - создаёт пользователя deploy, который может только загружать файлы в папку сайта;
 #   - генерирует ключ для GitHub Actions и печатает его — его нужно сохранить в секрет DEPLOY_SSH_KEY.
-# Повторный запуск безопасен, но выдаёт новый ключ — тогда обновите секрет в GitHub.
+# Повторный запуск безопасен и ключ не меняет. Новый ключ: FORCE_NEW_KEY=1 (потом обновите секрет в GitHub).
 
 set -euo pipefail
 
 DOMAIN="brigadirfound.ru"
-TECH_DOMAIN="brigadirfound.fvds.ru" # технический домен FirstVDS — работает сразу, пока обновляется DNS
 SITE_DIR="/var/www/site"
 DEPLOY_USER="deploy"
+NEW_KEY=0
 
 install_packages() {
   echo "==> Ставлю Caddy, rsync, fail2ban и файрвол"
@@ -69,8 +69,13 @@ HTML
 }
 
 setup_deploy_key() {
+  local rrsync auth_keys="/home/$DEPLOY_USER/.ssh/authorized_keys"
+  if [[ -s "$auth_keys" && "${FORCE_NEW_KEY:-0}" != "1" ]]; then
+    echo "==> Ключ для GitHub Actions уже настроен — оставляю как есть"
+    return
+  fi
+
   echo "==> Генерирую ключ для GitHub Actions"
-  local rrsync
   rrsync="$(command -v rrsync || true)"
   if [[ -z "$rrsync" ]]; then
     echo "Не найден rrsync (идёт в пакете rsync 3.2.4+). Нужна Ubuntu 22.04 или новее." >&2
@@ -80,16 +85,21 @@ setup_deploy_key() {
   ssh-keygen -q -t ed25519 -N "" -C "github-actions-deploy" -f "$KEY_DIR/deploy_key"
   install -d -m 700 -o "$DEPLOY_USER" -g "$DEPLOY_USER" "/home/$DEPLOY_USER/.ssh"
   # Ключ может только загружать файлы в папку сайта (rrsync), без шелла и проброса портов.
-  echo "command=\"$rrsync -wo $SITE_DIR\",restrict $(cat "$KEY_DIR/deploy_key.pub")" \
-    >"/home/$DEPLOY_USER/.ssh/authorized_keys"
-  chown "$DEPLOY_USER:$DEPLOY_USER" "/home/$DEPLOY_USER/.ssh/authorized_keys"
-  chmod 600 "/home/$DEPLOY_USER/.ssh/authorized_keys"
+  echo "command=\"$rrsync -wo $SITE_DIR\",restrict $(cat "$KEY_DIR/deploy_key.pub")" >"$auth_keys"
+  chown "$DEPLOY_USER:$DEPLOY_USER" "$auth_keys"
+  chmod 600 "$auth_keys"
+  NEW_KEY=1
 }
 
 setup_caddy() {
   echo "==> Настраиваю Caddy для ${DOMAIN}"
   cat >/etc/caddy/Caddyfile <<CADDY
-${DOMAIN}, ${TECH_DOMAIN} {
+{
+	# Только Let's Encrypt: запасной ZeroSSL не отвечает серверам из России
+	cert_issuer acme
+}
+
+${DOMAIN} {
 	root * ${SITE_DIR}
 	encode zstd gzip
 
@@ -122,23 +132,26 @@ CADDY
 print_summary() {
   local ip
   ip="$(curl -fsS4 --max-time 5 https://ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}')"
-  cat <<DONE
-
-=====================================================================
- Готово! Сервер настроен.
-
- 1) Скопируйте ключ ниже ЦЕЛИКОМ, вместе со строками BEGIN и END.
-    В GitHub откройте репозиторий → Settings → Secrets and variables →
-    Actions → New repository secret. Имя: DEPLOY_SSH_KEY, значение — ключ.
+  echo
+  echo "====================================================================="
+  echo " Готово! Сервер настроен."
+  echo
+  if [[ "$NEW_KEY" == "1" ]]; then
+    cat <<KEY
+ Скопируйте ключ ниже ЦЕЛИКОМ, вместе со строками BEGIN и END.
+ В GitHub откройте репозиторий → Settings → Secrets and variables →
+ Actions → New repository secret. Имя: DEPLOY_SSH_KEY, значение — ключ.
 
 $(cat "$KEY_DIR/deploy_key")
 
- 2) Сайт на техническом адресе (HTTPS появится через минуту):
-    https://${TECH_DOMAIN}
-
- 3) Для ${DOMAIN} в DNS нужны A-записи @ и www на IP ${ip}.
-=====================================================================
-DONE
+KEY
+  else
+    echo " Ключ для GitHub Actions не менялся — секрет обновлять не нужно."
+    echo
+  fi
+  echo " Сайт: https://${DOMAIN} — HTTPS появится, как только A-записи @ и www"
+  echo " в DNS будут указывать на IP ${ip}."
+  echo "====================================================================="
 }
 
 main() {
