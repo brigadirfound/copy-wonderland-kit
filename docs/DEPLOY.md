@@ -1,84 +1,64 @@
-# Как выложить сайт на свой сервер
+# Как сайт выкладывается на сервер
 
-Сайт полностью статичный: после сборки это просто папка `dist/` с HTML, JS, CSS и картинками. Базы данных и бэкенда нет, поэтому хватит самого дешёвого VPS.
+Сайт статичный: после сборки это папка `dist/` с HTML, JS, CSS и картинками. Бэкенда и базы нет.
 
-## Что понадобится
+- **Сервер:** VPS FirstVDS (Ubuntu 24.04, Москва), IP `212.57.118.168`.
+- **Домен:** `brigadirfound.ru`, DNS в SpaceWeb. Технический адрес FirstVDS: `brigadirfound.fvds.ru`.
+- **Веб-сервер:** Caddy — сам получает и продлевает HTTPS-сертификаты.
+- **Выкладка:** GitHub Actions (`.github/workflows/deploy.yml`) собирает сайт при каждом изменении в `main` и загружает `dist/` на сервер через rsync.
 
-- **VPS** на Ubuntu 22.04 или 24.04: 1 ядро, 1 ГБ памяти — с запасом. Лучше у российского хостинга или хотя бы на отдельном сервере, **не на том же, где VPN**: если заблокируют IP VPN, вместе с ним упадёт и сайт.
-- **Домен**. В DNS нужна A-запись на IP сервера (и на `www`, если нужен).
+## Первичная настройка (один раз)
 
-## 1. Поставить Caddy
+### 1. DNS в SpaceWeb
 
-Caddy — веб-сервер, который сам получает и продлевает HTTPS-сертификат.
+Домены → `brigadirfound.ru` → «Добавить DNS-запись»:
 
-```bash
-sudo apt update
-sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt install -y caddy
-```
+| Имя | Тип | Значение |
+|---|---|---|
+| `@` | A | `212.57.118.168` |
+| `www` | A | `212.57.118.168` |
 
-## 2. Настроить Caddy
+Если панель не принимает `@`, оставьте имя пустым. Записи начинают работать через 15 минут — несколько часов.
 
-Замените `example.ru` на свой домен и положите это в `/etc/caddy/Caddyfile`:
+### 2. Настройка сервера
 
-```caddyfile
-example.ru {
-	root * /var/www/site
-	encode zstd gzip
-
-	# Файлы с хэшем в имени можно кэшировать навсегда
-	@assets path /assets/*
-	header @assets Cache-Control "public, max-age=31536000, immutable"
-
-	# Все адреса вроде /cases/... отдаём через index.html (это SPA)
-	try_files {path} /index.html
-	file_server
-}
-
-www.example.ru {
-	redir https://example.ru{uri} permanent
-}
-```
+Зайдите на сервер под root (пароль — в письме или панели FirstVDS). На Windows 10/11 это работает прямо в PowerShell:
 
 ```bash
-sudo mkdir -p /var/www/site
-sudo systemctl reload caddy
+ssh root@212.57.118.168
 ```
 
-## 3. Собрать и загрузить сайт
-
-На своём компьютере (нужен Node.js 18+):
+И выполните одну команду:
 
 ```bash
-npm ci
-npm run build
-rsync -avz --delete dist/ root@IP_СЕРВЕРА:/var/www/site/
+curl -fsSL https://raw.githubusercontent.com/brigadirfound/copy-wonderland-kit/main/deploy/setup-server.sh | bash
 ```
 
-Всё. Сайт открывается по `https://example.ru`, сертификат Caddy получит сам в течение минуты.
+Скрипт (`deploy/setup-server.sh`) ставит Caddy, fail2ban и файрвол, создаёт пользователя `deploy` для загрузки файлов и в конце печатает ключ.
 
-Обновление сайта — те же две команды: `npm run build` и `rsync`.
+### 3. Ключ в GitHub
 
-## 4. После подключения домена
+Репозиторий → Settings → Secrets and variables → Actions → New repository secret:
 
-Замените старый адрес `https://copy-wonderland-kit.lovable.app` на свой домен:
+- **Name:** `DEPLOY_SSH_KEY`
+- **Secret:** ключ, который напечатал скрипт, целиком — вместе со строками `BEGIN` и `END`.
 
-- `src/content/site.ts` — поле `url` (из него собирается `sitemap.xml`);
-- `index.html` — теги `og:url`, `og:image`, `twitter:image`;
-- `public/robots.txt` — строка `Sitemap`.
+После этого выкладка запускается сама при каждом изменении в `main`. Запустить вручную: Actions → Deploy → Run workflow.
 
-Потом пересоберите и загрузите сайт. Чтобы Telegram обновил превью ссылки, отправьте её боту [@WebpageBot](https://t.me/WebpageBot).
+## Как это защищено
+
+- Ключ GitHub Actions может только загружать файлы в `/var/www/site`: на сервере он ограничен `rrsync`, без доступа к консоли.
+- Открыты только порты SSH, 80 и 443; fail2ban блокирует перебор паролей SSH.
+- Пароль root никому не отправляйте. Если понадобится поменять ключ — запустите скрипт ещё раз и обновите секрет.
+
+## Если что-то пошло не так
+
+- **Сайт не открывается по домену, но открывается по `brigadirfound.fvds.ru`** — DNS ещё не обновился, подождите.
+- **Выкладка упала в Actions** — откройте упавший запуск и посмотрите шаг «Upload to server». Чаще всего секрет скопирован не целиком.
+- **Логи веб-сервера:** `journalctl -u caddy --no-pager -n 50` на сервере.
 
 ## Яндекс Метрика
 
-Счётчик уже подключён (номер в `src/content/site.ts`, поле `yandexMetrikaId`). Визиты с `localhost` не считаются.
+Счётчик подключён (номер в `src/content/site.ts`, поле `yandexMetrikaId`). Визиты с `localhost` не считаются.
 
-Чтобы видеть, сколько людей нажали «Написать», создайте в Метрике две цели типа «JavaScript-событие»:
-
-- `telegram_click` — клик по любой кнопке Telegram;
-- `email_click` — клик по почте.
-
-Если счётчик удалён или нужен новый — поменяйте номер в `site.ts`. Также стоит добавить домен в [Яндекс Вебмастер](https://webmaster.yandex.ru) и указать там `sitemap.xml`.
+Чтобы видеть, сколько людей нажали «Написать», создайте в Метрике цели типа «JavaScript-событие»: `telegram_click` и `email_click`. Также стоит добавить сайт в [Яндекс Вебмастер](https://webmaster.yandex.ru) и указать `https://brigadirfound.ru/sitemap.xml`.

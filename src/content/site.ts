@@ -3,8 +3,8 @@
 export const site = {
   brand: "Макс Бригадир",
   name: "Максим",
-  // Поменять на свой домен, когда он будет подключён (нужно для превью ссылок).
-  url: "https://copy-wonderland-kit.lovable.app",
+  // Основной домен: из него собираются sitemap.xml и ссылки для превью.
+  url: "https://brigadirfound.ru",
   location: "Нижний Новгород",
   telegram: {
     handle: "@brigadirfound",
