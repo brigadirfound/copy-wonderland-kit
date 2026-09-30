@@ -1,0 +1,52 @@
+# Сборка сайта и выкладка на VPS при каждом изменении в main.
+# Нужен секрет DEPLOY_SSH_KEY — его печатает deploy/setup-server.sh.
+# Пока секрета нет, сайт только собирается (проверка, что сборка не сломана).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: 212.57.118.168
+      DEPLOY_USER: deploy
+      HAS_DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload to server
+        if: env.HAS_DEPLOY_KEY == 'true'
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # На сервере ключ ограничен rrsync: путь «./» — это папка сайта /var/www/site
+          rsync -rlptz --delete --chmod=D755,F644 \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:./"
+
+      - name: Deploy skipped
+        if: env.HAS_DEPLOY_KEY != 'true'
+        run: echo "::notice::Секрет DEPLOY_SSH_KEY не задан — сайт собран, но на сервер не выложен."
